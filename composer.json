@@ -1,0 +1,35 @@
+{
+  "name": "d3/klicktipp-php-client",
+  "type": "library",
+  "description": "A PHP Client for the Klicktipp API",
+  "keywords": [
+    "api",
+    "php",
+    "Klicktipp"
+  ],
+  "homepage": "https://www.d3data.de",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniel Seifert",
+      "email": "git@daniel-seifert.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "guzzlehttp/guzzle": "~7.0",
+    "ext-json": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.3",
+    "overtrue/phplint": "^1.2",
+    "squizlabs/php_codesniffer": "3.*",
+    "phpstan/phpstan": "^1.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "D3\\KlicktippPhpClient\\": "src/"
+    }
+  }
+}
+
