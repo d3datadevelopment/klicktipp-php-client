@@ -4,6 +4,7 @@ namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 
 class Account extends Model
 {
@@ -16,8 +17,7 @@ class Account extends Model
             'POST',
             'account/login',
             [
-                'query' => $this->getQuery(),
-                'form_params' => [
+                RequestOptions::FORM_PARAMS => [
                     'username' => $this->connection->getClientKey(),
                     'password' => $this->connection->getSecretKey()
                 ]
@@ -34,8 +34,7 @@ class Account extends Model
     {
         $response = $this->connection->requestAndParse(
             'POST',
-            'account/logout',
-            ['query' => $this->getQuery()]
+            'account/logout'
         );
 
         return (bool) current($response);

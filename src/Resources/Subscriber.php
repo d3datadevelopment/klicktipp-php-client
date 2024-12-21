@@ -5,6 +5,7 @@ namespace D3\KlicktippPhpClient\Resources;
 use D3\KlicktippPhpClient\Entities\Subscriber as SubscriberEntity;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 
 class Subscriber extends Model
 {
@@ -15,10 +16,7 @@ class Subscriber extends Model
     {
         return $this->connection->requestAndParse(
             'GET',
-            'subscriber',
-            [
-                'query' => $this->getQuery()
-            ]
+            'subscriber'
         );
     }
 
@@ -29,10 +27,7 @@ class Subscriber extends Model
     {
         $data = $this->connection->requestAndParse(
             'GET',
-            'subscriber/'.urlencode(trim($subscriberId)),
-            [
-                'query' => $this->getQuery()
-            ]
+            'subscriber/'.urlencode(trim($subscriberId))
         );
 
         return new SubscriberEntity($data);
@@ -48,8 +43,7 @@ class Subscriber extends Model
                 'POST',
                 'subscriber/search',
                 [
-                    'query' => $this->getQuery(),
-                    'form_params' => [
+                    RequestOptions::FORM_PARAMS => [
                         'email' => trim($mailAddress)
                     ]
                 ]

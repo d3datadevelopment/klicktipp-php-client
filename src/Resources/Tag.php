@@ -16,10 +16,7 @@ class Tag extends Model
     {
         return $this->connection->requestAndParse(
             'GET',
-            'tag',
-            [
-                'query' => $this->getQuery()
-            ]
+            'tag'
         );
     }
 
