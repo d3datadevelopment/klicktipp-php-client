@@ -5,6 +5,7 @@ namespace D3\KlicktippPhpClient\Resources;
 use D3\KlicktippPhpClient\Entities\Tag as TagEntity;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 
 class Tag extends Model
 {
@@ -31,7 +32,7 @@ class Tag extends Model
             'GET',
             'tag/'.urlencode(trim($tagId)),
             [
-                'query' => $this->getQuery()
+                RequestOptions::QUERY   => $this->getQuery()
             ]
         );
 

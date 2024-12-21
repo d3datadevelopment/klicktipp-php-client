@@ -24,10 +24,6 @@ class Account extends Model
             ]
         );
 
-        $this->connection->setCookie(
-            current($response->getHeader('set-cookie'))
-        );
-
         return $this->connection->parseResponse($response);
     }
 
@@ -41,10 +37,6 @@ class Account extends Model
             'account/logout',
             ['query' => $this->getQuery()]
         );
-
-        if (current($response)) {
-            $this->connection->setCookie(null);
-        }
 
         return (bool) current($response);
     }

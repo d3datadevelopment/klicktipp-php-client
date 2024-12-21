@@ -19,8 +19,10 @@ use Composer\InstalledVersions;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
 
@@ -34,7 +36,7 @@ class Connection
 
     protected string $secret_key;
 
-    protected ?string $cookie = null;
+    protected CookieJar $cookies_jar;
 
     /**
      * Contains the HTTP client (e.g. Guzzle)
@@ -45,6 +47,7 @@ class Connection
     {
         $this->client_key = $client_key;
         $this->secret_key = $secret_key;
+        $this->cookies_jar = new CookieJar();
     }
 
     public function getClientKey(): string
@@ -94,15 +97,11 @@ class Connection
     {
         try {
             $options['query'] = $options['query'] ?? [];
+            $options[RequestOptions::COOKIES] = $this->getCookiesJar();
 
             if (! empty($options['body'])) {
                 $options['body'] = json_encode($options['body']);
             }
-
-            $header = [
-                'Cookie' => $this->cookie ?? ''
-            ];
-            $options['headers'] = $header;
 
             return $this->getClient()->request($method, $uri, $options);
         } catch (RequestException $e) {
@@ -166,8 +165,8 @@ class Connection
         }
     }
 
-    public function setCookie(?string $cookie): void
+    public function getCookiesJar(): CookieJar
     {
-        $this->cookie = $cookie;
+        return $this->cookies_jar;
     }
 }

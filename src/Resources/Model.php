@@ -3,6 +3,7 @@
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Connection;
+use GuzzleHttp\RequestOptions;
 
 abstract class Model
 {
@@ -59,7 +60,10 @@ abstract class Model
         return array_filter(array_merge(
             $this->query,
             $this->filters,
-            [ 'limit' => $this->getLimit(), 'offset' => $this->getOffset() ]
+            [
+                'limit' => $this->getLimit(),
+                'offset' => $this->getOffset()
+            ]
         ));
     }
 
