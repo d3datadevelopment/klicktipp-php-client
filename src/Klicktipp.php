@@ -17,6 +17,7 @@ namespace D3\KlicktippPhpClient;
 
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\Account;
+use D3\KlicktippPhpClient\Resources\Field;
 use D3\KlicktippPhpClient\Resources\Subscriber;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 use D3\KlicktippPhpClient\Resources\Tag;
@@ -66,6 +67,11 @@ class Klicktipp
     public function account(): Account
     {
         return new Account($this->getConnection());
+    }
+
+    public function field(): Field
+    {
+        return new Field($this->getConnection());
     }
 
     public function subscriber(): Subscriber
