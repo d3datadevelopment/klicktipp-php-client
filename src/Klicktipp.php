@@ -18,6 +18,7 @@ namespace D3\KlicktippPhpClient;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\Account;
 use D3\KlicktippPhpClient\Resources\Subscriber;
+use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 use D3\KlicktippPhpClient\Resources\Tag;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -55,6 +56,11 @@ class Klicktipp
             $this->connection = new Connection($this->client_key, $this->secret_key);
         }
         return $this->connection;
+    }
+
+    public function subscription(): SubscriptionProcess
+    {
+        return new SubscriptionProcess($this->getConnection());
     }
 
     public function account(): Account
