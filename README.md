@@ -42,4 +42,4 @@ $subscriber = $klicktipp->subscriber()->search($subscriberId);
 |--------------------------------------------------------------------------------------|-------------------------|
 | account                                                                              | :ballot_box_with_check: |
 | subscriber                                                                           | :ballot_box_with_check: |
-| tag                                                                                  | :white_check_mark:      |
+| tag                                                                                  | :ballot_box_with_check: |

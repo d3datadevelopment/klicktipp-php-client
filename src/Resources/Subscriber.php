@@ -50,4 +50,88 @@ class Subscriber extends Model
             )
         );
     }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function subscribe(
+        string $mailAddress,
+        string $listId,
+        string $tagId,
+        array $fields,
+        string $smsNumber
+    ): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'subscriber',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'email' => trim($mailAddress),
+                        'listid' => trim($listId),
+                        'tagid' => trim($tagId),
+                        'fields' => array_filter($fields),
+                        'smsnumber' => trim($smsNumber),
+                    ]
+                ]
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function unsubscribe(string $mailAddress): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'subscriber/unsubscribe',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'email' => trim($mailAddress)
+                    ]
+                ]
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function tag(string $mailAddress, string $tagId): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'subscriber/tag',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'email' => trim($mailAddress),
+                        'tagid' => trim($tagId)
+                    ]
+                ]
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function untag(string $mailAddress, string $tagId): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'subscriber/search',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'email' => trim($mailAddress),
+                        'tagid' => trim($tagId)
+                    ]
+                ]
+            )
+        );
+    }
 }

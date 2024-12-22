@@ -27,12 +27,52 @@ class Tag extends Model
     {
         $data = $this->connection->requestAndParse(
             'GET',
-            'tag/'.urlencode(trim($tagId)),
-            [
-                RequestOptions::QUERY   => $this->getQuery()
-            ]
+            'tag/'.urlencode(trim($tagId))
         );
 
         return new TagEntity($data);
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function create(string $name): array
+    {
+        return $this->connection->requestAndParse(
+            'POST',
+            'tag/',
+            [
+                RequestOptions::FORM_PARAMS => [
+                    'name'    => trim($name)
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function update(string $tagId, string $newName): array
+    {
+        return $this->connection->requestAndParse(
+            'PUT',
+            'tag/'.urlencode(trim($tagId)),
+            [
+                RequestOptions::FORM_PARAMS => [
+                    'name'    => trim($newName)
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function delete(string $tagId): array
+    {
+        return $this->connection->requestAndParse(
+            'DELETE',
+            'tag/'.urlencode(trim($tagId))
+        );
     }
 }
