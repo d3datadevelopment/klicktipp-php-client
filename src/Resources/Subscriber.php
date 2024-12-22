@@ -3,6 +3,7 @@
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Subscriber as SubscriberEntity;
+use D3\KlicktippPhpClient\Entities\SubscriberList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
@@ -12,12 +13,14 @@ class Subscriber extends Model
     /**
      * @throws BaseException|GuzzleException
      */
-    public function index(): array
+    public function index(): SubscriberList
     {
-        return $this->connection->requestAndParse(
+        $data = $this->connection->requestAndParse(
             'GET',
             'subscriber'
         );
+
+        return new SubscriberList($data);
     }
 
     /**

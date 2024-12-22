@@ -3,6 +3,7 @@
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Tag as TagEntity;
+use D3\KlicktippPhpClient\Entities\TagList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
@@ -12,12 +13,14 @@ class Tag extends Model
     /**
      * @throws BaseException|GuzzleException
      */
-    public function index(): array
+    public function index(): TagList
     {
-        return $this->connection->requestAndParse(
+        $data = $this->connection->requestAndParse(
             'GET',
             'tag'
         );
+
+        return new TagList($data);
     }
 
     /**
