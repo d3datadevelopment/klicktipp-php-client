@@ -137,4 +137,116 @@ class Subscriber extends Model
             )
         );
     }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function tagged(string $tagId): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'subscriber/tagged',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'tagid' => trim($tagId)
+                    ]
+                ]
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function update(string $subscriberId, array $fields, string $newEmail, string $newSmsNumber): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'PUT',
+                'subscriber/'.urlencode(trim($subscriberId)),
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        //ToDo: apply trim to array
+                        'fields' => $fields,
+                        'newemail' => trim($newEmail),
+                        'newsmsnumber' => trim($newSmsNumber),
+                    ]
+                ]
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function delete(string $subscriberId): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'DELETE',
+                'subscriber/'.urlencode(trim($subscriberId))
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function signin(string $apikey, string $emailAddress, array $fields, string $smsNumber): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'subscriber/signin',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'apikey' => trim($apikey),
+                        'email' => trim($emailAddress),
+                        //ToDo: apply trim to array
+                        'fields' => $fields,
+                        'smsnumber' => trim($smsNumber),
+                    ]
+                ]
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function signout(string $apikey, string $emailAddress): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'subscriber/signout',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'apikey' => trim($apikey),
+                        'email' => trim($emailAddress),
+                    ]
+                ]
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException|GuzzleException
+     */
+    public function signoff(string $apikey, string $emailAddress): string
+    {
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'subscriber/signoff',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'apikey' => trim($apikey),
+                        'email' => trim($emailAddress),
+                    ]
+                ]
+            )
+        );
+    }
 }
