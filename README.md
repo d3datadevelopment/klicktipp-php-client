@@ -22,11 +22,12 @@ $klicktipp = new \D3\KlicktippPhpClient\Klicktipp(
 );
 ```
 
-## search a subscriber
+## get a subscriber status
 
 ```php
 $subscriberId = $klicktipp->subscriber()->search('me@johndoe.net');
-$subscriber = $klicktipp->subscriber()->search($subscriberId);
+$subscriber = $klicktipp->subscriber()->get($subscriberId);
+$subscriber->isSubscribed()
 ```
 
 ## Supported endpoints (still being added)
@@ -38,8 +39,10 @@ $subscriber = $klicktipp->subscriber()->search($subscriberId);
 :x: = Not yet developed<br />
 :heavy_exclamation_mark: = deprecated/not supported <br />
 
-| Endpoint                                                                             | Status                  |
-|--------------------------------------------------------------------------------------|-------------------------|
-| account                                                                              | :ballot_box_with_check: |
-| subscriber                                                                           | :ballot_box_with_check: |
-| tag                                                                                  | :ballot_box_with_check: |
+| Endpoint     | Status                  |
+|--------------|-------------------------|
+| account      | :ballot_box_with_check: |
+| field        | :ballot_box_with_check: |
+| subscriber   | :ballot_box_with_check: |
+| subscription | :ballot_box_with_check: |
+| tag          | :ballot_box_with_check: |
