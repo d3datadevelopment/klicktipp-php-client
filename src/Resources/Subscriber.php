@@ -103,7 +103,7 @@ class Subscriber extends Model
     /**
      * @throws BaseException|GuzzleException
      */
-    public function tag(string $mailAddress, string $tagId): string
+    public function tag(string $mailAddress, array $tagIds): string
     {
         return current(
             $this->connection->requestAndParse(
@@ -112,7 +112,8 @@ class Subscriber extends Model
                 [
                     RequestOptions::FORM_PARAMS => [
                         'email' => trim($mailAddress),
-                        'tagid' => trim($tagId)
+                        //ToDo: apply trim to array
+                        'tagids' => $tagIds
                     ]
                 ]
             )
@@ -159,7 +160,7 @@ class Subscriber extends Model
     /**
      * @throws BaseException|GuzzleException
      */
-    public function update(string $subscriberId, array $fields, string $newEmail, string $newSmsNumber): string
+    public function update(string $subscriberId, array $fields, string $newEmail = '', string $newSmsNumber = ''): string
     {
         return current(
             $this->connection->requestAndParse(
