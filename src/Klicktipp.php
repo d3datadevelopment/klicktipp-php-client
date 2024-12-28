@@ -1,8 +1,10 @@
 <?php
 
 /**
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * Copyright (c) D3 Data Development (Inh. Thomas Dartsch)
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  *
  * https://www.d3data.de
  *
@@ -40,7 +42,7 @@ class Klicktipp
         string $client_key,
         string $secret_key,
         ClientInterface $client = null
-    ){
+    ) {
         $this->client_key = $client_key;
         $this->secret_key = $secret_key;
 

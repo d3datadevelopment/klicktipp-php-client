@@ -1,8 +1,10 @@
 <?php
 
 /**
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * Copyright (c) D3 Data Development (Inh. Thomas Dartsch)
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  *
  * https://www.d3data.de
  *
@@ -73,14 +75,14 @@ class Connection
      */
     public function getClient(): ClientInterface
     {
-        $this->client = $this->client ??
+        $this->client ??=  
             new Client([
                 'base_uri' => self::URL,
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'Accept' => 'application/json',
-                    'User-Agent' => self::USERAGENT.'/'.InstalledVersions::getVersion('d3/klicktipp-php-client')
-                ]
+                    'User-Agent' => self::USERAGENT.'/'.InstalledVersions::getVersion('d3/klicktipp-php-client'),
+                ],
             ]);
 
         return $this->client;
@@ -91,12 +93,12 @@ class Connection
      * @param string $uri
      * @param array $options
      * @return ResponseInterface
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
     public function request(string $method, string $uri, array $options = []): ResponseInterface
     {
         try {
-            $options['query'] = $options['query'] ?? [];
+            $options['query'] ??= [];
             $options[RequestOptions::COOKIES] = $this->getCookiesJar();
 
             if (! empty($options['body'])) {
@@ -114,6 +116,8 @@ class Connection
                 $e->getResponse()->getStatusCode(),
                 $e
             );
+        } catch (GuzzleException $e) {
+            throw new BaseException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -123,7 +127,6 @@ class Connection
      * @param array $options
      * @return array
      * @throws BaseException
-     * @throws GuzzleException
      */
     public function requestAndParse(string $method, string $uri, array $options = []): array
     {
