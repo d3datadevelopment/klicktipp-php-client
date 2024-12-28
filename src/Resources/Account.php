@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Copyright (c) D3 Data Development (Inh. Thomas Dartsch)
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
+ *
+ * https://www.d3data.de
+ *
+ * @copyright (C) D3 Data Development (Inh. Thomas Dartsch)
+ * @author    D3 Data Development - Daniel Seifert <info@shopmodule.com>
+ * @link      https://www.oxidmodule.com
+ */
+
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Exceptions\BaseException;
@@ -9,34 +22,32 @@ use GuzzleHttp\RequestOptions;
 class Account extends Model
 {
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
     public function login(): array
     {
-        $response = $this->connection->request(
+        return $this->connection->requestAndParse(
             'POST',
-            'account/login',
+            'account/login.json',
             [
                 RequestOptions::FORM_PARAMS => [
                     'username' => $this->connection->getClientKey(),
-                    'password' => $this->connection->getSecretKey()
-                ]
+                    'password' => $this->connection->getSecretKey(),
+                ],
             ]
         );
-
-        return $this->connection->parseResponse($response);
     }
 
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
     public function logout(): bool
     {
         $response = $this->connection->requestAndParse(
             'POST',
-            'account/logout'
+            'account/logout.json'
         );
 
-        return (bool) current($response);
+        return (bool)current($response);
     }
 }
