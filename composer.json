@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": ">=8.0",
+    "php": "^8.0",
     "composer/composer": "^2.7.1",
     "doctrine/collections": "^1.8.0",
     "guzzlehttp/guzzle": "~7.0",
@@ -26,12 +26,23 @@
     "phpunit/phpunit": "^9.3",
     "overtrue/phplint": "^1.2",
     "squizlabs/php_codesniffer": "3.*",
-    "phpstan/phpstan": "^1.9"
+    "phpstan/phpstan": "^2.0",
+    "friendsofphp/php-cs-fixer": "^3.65"
   },
   "autoload": {
     "psr-4": {
       "D3\\KlicktippPhpClient\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "D3\\KlicktippPhpClient\\tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit --no-coverage",
+    "check-style": "./vendor/bin/php-cs-fixer fix --verbose --dry-run",
+    "fix-style": "./vendor/bin/php-cs-fixer fix --verbose",
+    "check-code": "./vendor/bin/phpstan analyse -c phpstan.neon --no-progress --ansi"
   }
 }
-
