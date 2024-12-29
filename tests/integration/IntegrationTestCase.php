@@ -20,6 +20,7 @@ use D3\KlicktippPhpClient\tests\TestCase;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -27,16 +28,26 @@ use Psr\Http\Message\ResponseInterface;
  */
 class IntegrationTestCase extends TestCase
 {
+    protected array $historyContainer = [];
+
     public function getConnectionMock(ResponseInterface $response): Connection
     {
         $mock = new MockHandler([$response]);
 
+        $history = Middleware::history($this->historyContainer);
+
         $handlerStack = HandlerStack::create($mock);
+        $handlerStack->push($history);
         $client = new Client(['handler' => $handlerStack]);
 
         $connection = new Connection('userName', 'password');
         $connection->setClient($client);
 
         return $connection;
+    }
+
+    protected function getHistoryContainer(): array
+    {
+        return $this->historyContainer;
     }
 }

@@ -18,7 +18,6 @@ namespace D3\KlicktippPhpClient\Resources;
 use D3\KlicktippPhpClient\Entities\Subscriber as SubscriberEntity;
 use D3\KlicktippPhpClient\Entities\SubscriberList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 
 class Subscriber extends Model
@@ -83,13 +82,16 @@ class Subscriber extends Model
                 'subscriber.json',
                 [
                     RequestOptions::FORM_PARAMS => array_filter(
-                        [
-                            'email' => trim($mailAddress),
-                            'listid' => trim($listId ?? ''),
-                            'tagid' => trim($tagId ?? ''),
-                            'fields' => array_filter($fields ?? []),
-                            'smsnumber' => trim($smsNumber ?? ''),
-                        ]
+                        array_merge(
+                            $this->convertDataArrayToUrlParameters($fields ?? []),
+                            [
+                                'email' => trim($mailAddress),
+                                'listid' => trim($listId ?? ''),
+                                'tagid' => trim($tagId ?? ''),
+                                'fields' => array_filter($fields ?? []),
+                                'smsnumber' => trim($smsNumber ?? ''),
+                            ]
+                        )
                     ),
                 ]
             )
@@ -175,21 +177,24 @@ class Subscriber extends Model
      */
     public function update(
         string $subscriberId,
-        array $fields,
-        string $newEmail = '',
-        string $newSmsNumber = ''
-    ): string {
-        return current(
+        ?array $fields = null,
+        ?string $newEmail = null,
+        ?string $newSmsNumber = null
+    ): bool {
+        return (bool) current(
             $this->connection->requestAndParse(
                 'PUT',
                 'subscriber/'.urlencode(trim($subscriberId)).'.json',
                 [
-                    RequestOptions::FORM_PARAMS => [
-                        //ToDo: apply trim to array
-                        'fields' => array_filter(array_map('trim', $fields)),
-                        'newemail' => trim($newEmail),
-                        'newsmsnumber' => trim($newSmsNumber),
-                    ],
+                    RequestOptions::FORM_PARAMS => array_filter(
+                        array_merge(
+                            $this->convertDataArrayToUrlParameters($fields ?? []),
+                            [
+                                'newemail' => trim($newEmail ?? ''),
+                                'newsmsnumber' => trim($newSmsNumber ?? ''),
+                            ]
+                        )
+                    ),
                 ]
             )
         );
@@ -197,10 +202,11 @@ class Subscriber extends Model
 
     /**
      * @throws BaseException
+     * @return true
      */
-    public function delete(string $subscriberId): string
+    public function delete(string $subscriberId): bool
     {
-        return current(
+        return (bool) current(
             $this->connection->requestAndParse(
                 'DELETE',
                 'subscriber/'.urlencode(trim($subscriberId)).'.json'
@@ -211,20 +217,23 @@ class Subscriber extends Model
     /**
      * @throws BaseException
      */
-    public function signin(string $apikey, string $emailAddress, array $fields, string $smsNumber): string
+    public function signin(string $apikey, string $emailAddress, ?array $fields = null, ?string $smsNumber = null): string
     {
         return current(
             $this->connection->requestAndParse(
                 'POST',
                 'subscriber/signin.json',
                 [
-                    RequestOptions::FORM_PARAMS => [
-                        'apikey' => trim($apikey),
-                        'email' => trim($emailAddress),
-                        //ToDo: apply trim to array
-                        'fields' => $fields,
-                        'smsnumber' => trim($smsNumber),
-                    ],
+                    RequestOptions::FORM_PARAMS => array_filter(
+                        array_merge(
+                            $this->convertDataArrayToUrlParameters($fields ?? []),
+                            [
+                                'apikey' => trim($apikey),
+                                'email' => trim($emailAddress),
+                                'smsnumber' => trim($smsNumber ?? ''),
+                            ]
+                        )
+                    ),
                 ]
             )
         );

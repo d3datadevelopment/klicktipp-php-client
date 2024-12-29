@@ -25,4 +25,14 @@ abstract class Model
     {
         $this->connection = $connection;
     }
+
+    protected function convertDataArrayToUrlParameters(array $data): array
+    {
+        $urlFields = [];
+        foreach (array_filter($data) as $key => $value) {
+            $urlFields['fields['.$key.']'] = $value;
+        }
+
+        return $urlFields;
+    }
 }
