@@ -18,77 +18,83 @@ namespace D3\KlicktippPhpClient\Resources;
 use D3\KlicktippPhpClient\Entities\Tag as TagEntity;
 use D3\KlicktippPhpClient\Entities\TagList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 
 class Tag extends Model
 {
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
     public function index(): TagList
     {
         $data = $this->connection->requestAndParse(
             'GET',
-            'tag'
+            'tag.json'
         );
 
         return new TagList($data);
     }
 
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
     public function get(string $tagId): TagEntity
     {
         $data = $this->connection->requestAndParse(
             'GET',
-            'tag/'.urlencode(trim($tagId))
+            'tag/'.urlencode(trim($tagId)).'.json'
         );
 
         return new TagEntity($data);
     }
 
     /**
-     * @throws BaseException|GuzzleException
+     * @return string - new tag id
+     * @throws BaseException
      */
-    public function create(string $name): array
+    public function create(string $name): string
     {
-        return $this->connection->requestAndParse(
-            'POST',
-            'tag/',
-            [
-                RequestOptions::FORM_PARAMS => [
-                    'name'    => trim($name),
-                ],
-            ]
+        return current(
+            $this->connection->requestAndParse(
+                'POST',
+                'tag.json',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'name'    => trim($name),
+                    ],
+                ]
+            )
         );
     }
 
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
-    public function update(string $tagId, string $newName): array
+    public function update(string $tagId, string $newName): bool
     {
-        return $this->connection->requestAndParse(
-            'PUT',
-            'tag/'.urlencode(trim($tagId)),
-            [
-                RequestOptions::FORM_PARAMS => [
-                    'name'    => trim($newName),
-                ],
-            ]
+        return (bool) current(
+            $this->connection->requestAndParse(
+                'PUT',
+                'tag/'.urlencode(trim($tagId)).'.json',
+                [
+                    RequestOptions::FORM_PARAMS => [
+                        'name'    => trim($newName),
+                    ],
+                ]
+            )
         );
     }
 
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
-    public function delete(string $tagId): array
+    public function delete(string $tagId): bool
     {
-        return $this->connection->requestAndParse(
-            'DELETE',
-            'tag/'.urlencode(trim($tagId))
+        return (bool) current(
+            $this->connection->requestAndParse(
+                'DELETE',
+                'tag/'.urlencode(trim($tagId)).'.json'
+            )
         );
     }
 }
