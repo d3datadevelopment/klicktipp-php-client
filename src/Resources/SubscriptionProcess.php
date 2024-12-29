@@ -18,46 +18,45 @@ namespace D3\KlicktippPhpClient\Resources;
 use D3\KlicktippPhpClient\Entities\Subscription as SubscriptionEntity;
 use D3\KlicktippPhpClient\Entities\SubscriptionList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 
 class SubscriptionProcess extends Model
 {
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
     public function index(): SubscriptionList
     {
         $data = $this->connection->requestAndParse(
             'GET',
-            'list'
+            'list.json'
         );
 
         return new SubscriptionList($data);
     }
 
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
     public function get(string $listId): SubscriptionEntity
     {
         $data = $this->connection->requestAndParse(
             'GET',
-            'list/'.urlencode(trim($listId))
+            'list/'.urlencode(trim($listId)).'.json'
         );
 
         return new SubscriptionEntity($data);
     }
 
     /**
-     * @throws BaseException|GuzzleException
+     * @throws BaseException
      */
     public function redirect(string $listId, string $email): string
     {
         return current(
             $this->connection->requestAndParse(
                 'POST',
-                'list/redirect',
+                'list/redirect.json',
                 [
                     RequestOptions::FORM_PARAMS => [
                         'listid'    => trim($listId),
