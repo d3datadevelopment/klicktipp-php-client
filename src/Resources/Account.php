@@ -16,7 +16,6 @@
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Exceptions\BaseException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 
 class Account extends Model

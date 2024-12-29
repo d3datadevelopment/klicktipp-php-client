@@ -36,7 +36,6 @@ class Klicktipp
 
     /**
      * @throws BaseException
-     * @throws GuzzleException
      */
     public function __construct(
         string $client_key,
