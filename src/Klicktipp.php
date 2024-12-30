@@ -24,7 +24,6 @@ use D3\KlicktippPhpClient\Resources\Subscriber;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 use D3\KlicktippPhpClient\Resources\Tag;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 
 class Klicktipp
 {

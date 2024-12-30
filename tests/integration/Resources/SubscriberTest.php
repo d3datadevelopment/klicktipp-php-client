@@ -22,6 +22,7 @@ use D3\KlicktippPhpClient\Resources\Subscriber;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
 use Generator;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
@@ -78,7 +79,7 @@ class SubscriberTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Subscriber::get
      * @dataProvider getDataProvider
      */
-    public function testGet(ResponseInterface $response, ?SubscriberEntity $expected, bool $expectException = false)
+    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
     {
         $sut = new Subscriber($this->getConnectionMock($response));
 
@@ -86,14 +87,14 @@ class SubscriberTest extends IntegrationTestCase
             $this->expectException(BaseException::class);
         }
 
-        $this->assertEquals(
-            $expected,
-            $this->callMethod(
-                $sut,
-                'get',
-                ['155988456']
-            )
+        $return = $this->callMethod(
+            $sut,
+            'get',
+            ['155988456']
         );
+
+        $this->assertInstanceOf(SubscriberEntity::class, $return);
+        $this->assertSame($expected, $return->toArray());
     }
 
     public static function getDataProvider(): Generator
@@ -133,7 +134,7 @@ class SubscriberTest extends IntegrationTestCase
             "fieldWebsite": "",
             "fieldBirthday": "",
             "fieldLeadValue": ""
-        }'), new SubscriberEntity([
+        }'), [
             "id"    => "155988456",
             "listid" => "368370",
             "optin" => "28.12.2024 22:52:09",
@@ -168,7 +169,7 @@ class SubscriberTest extends IntegrationTestCase
             "fieldWebsite" => "",
             "fieldBirthday" => "",
             "fieldLeadValue" => "",
-        ])];
+        ]];
         yield 'unknown id' => [new Response(404, [], ''), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
     }
@@ -565,5 +566,92 @@ class SubscriberTest extends IntegrationTestCase
         yield 'success' => [new Response(200, [], '[true]'), true];
         yield 'unknown subsriber' => [new Response(406, [], '{"error": 9}'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Subscriber::setSubscriber
+     * @dataProvider setSubscriberDataProvider
+     */
+    public function testSetSubscriber(
+        array $responses,
+        ?string $foundId,
+        InvokedCount $updateInvocations,
+        InvokedCount $subscribeInvocations
+    ): void {
+        $entityMock = $this->getMockBuilder(SubscriberEntity::class)
+            ->getMock();
+
+        $sut = $this->getMockBuilder(Subscriber::class)
+            ->setConstructorArgs([$this->getConnectionMock($responses)])
+            ->onlyMethods(['search', 'update', 'subscribe', 'get'])
+            ->getMock();
+        $sut->expects($this->once())->method('search')->will(
+            $foundId ? $this->returnValue($foundId) : $this->throwException(new BaseException())
+        );
+        $sut->expects($updateInvocations)->method('update')->willReturn(true);
+        $sut->expects($subscribeInvocations)->method('subscribe')->willReturn('myId');
+        $sut->expects($this->once())->method('get')->with(
+            $this->identicalTo('myId')
+        )->willReturn($entityMock);
+
+        $this->callMethod(
+            $sut,
+            'setSubscriber',
+            ['oldMailAddress']
+        );
+    }
+
+    public static function setSubscriberDataProvider(): Generator
+    {
+        yield 'update' => [
+            [
+                new Response(200, [], '[true]'),
+                new Response(200, [], '[true]'),
+                new Response(200, [], '[true]'),
+            ],
+            'myId',
+            self::once(),
+            self::never(),
+        ];
+        yield 'subscribe' => [
+            [
+                new Response(200, [], '[true]'),
+                new Response(200, [], '[true]'),
+                new Response(200, [], '[true]'),
+            ],
+            null,
+            self::never(),
+            self::once(),
+        ];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Subscriber::getSubscriberByMailAddress
+     */
+    public function testGetSubscriberByMailAddress(): void
+    {
+        $responses = [
+            new Response(200, [], '[true]'),
+            new Response(200, [], '[true]'),
+        ];
+
+        $sut = $this->getMockBuilder(Subscriber::class)
+            ->setConstructorArgs([$this->getConnectionMock($responses)])
+            ->onlyMethods(['search', 'get'])
+            ->getMock();
+        $sut->expects($this->once())->method('search')->willReturn('myId');
+        $sut->expects($this->once())->method('get')->with(
+            $this->identicalTo('myId')
+        )->willReturn(new SubscriberEntity());
+
+        $this->callMethod(
+            $sut,
+            'getSubscriberByMailAddress',
+            ['myMailAddress']
+        );
     }
 }

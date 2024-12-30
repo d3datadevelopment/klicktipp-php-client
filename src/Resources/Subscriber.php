@@ -45,7 +45,7 @@ class Subscriber extends Model
             'subscriber/'.urlencode(trim($subscriberId)).'.json'
         );
 
-        return new SubscriberEntity($data);
+        return new SubscriberEntity($data, $this);
     }
 
     /**
@@ -274,6 +274,35 @@ class Subscriber extends Model
                     ],
                 ]
             )
+        );
+    }
+
+    /**
+     * @throws BaseException
+     */
+    public function setSubscriber(
+        string $mailAddress,
+        ?string $newMailAddress = null,
+        ?string $smsNumber = null,
+        ?array $fields = null
+    ): SubscriberEntity {
+        try {
+            $id = $this->search($mailAddress);
+            $this->update($id, $fields, $newMailAddress ?? $mailAddress, $smsNumber);
+        } catch (BaseException) {
+            $id = $this->subscribe($newMailAddress ?? $mailAddress, null, null, $fields, $smsNumber);
+        }
+
+        return $this->get($id);
+    }
+
+    /**
+     * @throws BaseException
+     */
+    public function getSubscriberByMailAddress(string $mailAddress): SubscriberEntity
+    {
+        return $this->get(
+            $this->search($mailAddress)
         );
     }
 }

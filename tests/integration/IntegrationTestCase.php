@@ -30,9 +30,11 @@ class IntegrationTestCase extends TestCase
 {
     protected array $historyContainer = [];
 
-    public function getConnectionMock(ResponseInterface $response): Connection
+    public function getConnectionMock(ResponseInterface|array $response): Connection
     {
-        $mock = new MockHandler([$response]);
+        $mock = new MockHandler(
+            is_array($response) ? $response : [$response]
+        );
 
         $history = Middleware::history($this->historyContainer);
 
