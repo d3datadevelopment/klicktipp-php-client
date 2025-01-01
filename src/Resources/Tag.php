@@ -45,7 +45,7 @@ class Tag extends Model
             'tag/'.urlencode(trim($tagId)).'.json'
         );
 
-        return new TagEntity($data);
+        return new TagEntity($data, $this);
     }
 
     /**
@@ -70,16 +70,17 @@ class Tag extends Model
     /**
      * @throws BaseException
      */
-    public function update(string $tagId, string $newName): bool
+    public function update(string $tagId, ?string $name = null, ?string $text = null): bool
     {
         return (bool) current(
             $this->connection->requestAndParse(
                 'PUT',
                 'tag/'.urlencode(trim($tagId)).'.json',
                 [
-                    RequestOptions::FORM_PARAMS => [
-                        'name'    => trim($newName),
-                    ],
+                    RequestOptions::FORM_PARAMS => array_filter([
+                        'name'    => trim($name ?? ''),
+                        'text'    => trim($text ?? ''),
+                    ]),
                 ]
             )
         );

@@ -72,7 +72,7 @@ class TagTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Tag::get
      * @dataProvider getDataProvider
      */
-    public function testGet(ResponseInterface $response, ?TagEntity $expected, bool $expectException = false)
+    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
     {
         $sut = new Tag($this->getConnectionMock($response));
 
@@ -80,14 +80,14 @@ class TagTest extends IntegrationTestCase
             $this->expectException(BaseException::class);
         }
 
-        $this->assertEquals(
-            $expected,
-            $this->callMethod(
-                $sut,
-                'get',
-                ['12514414']
-            )
+        $return = $this->callMethod(
+            $sut,
+            'get',
+            ['12514414']
         );
+
+        $this->assertInstanceOf(TagEntity::class, $return);
+        $this->assertSame($expected, $return->toArray());
     }
 
     public static function getDataProvider(): Generator
@@ -96,11 +96,11 @@ class TagTest extends IntegrationTestCase
             "tagid": "12514414",
             "name": "tagName2",
             "text": ""
-        }'), new TagEntity([
+        }'), [
             "tagid"    => "12514414",
             "name" => "tagName2",
             "text" => "",
-        ])];
+        ]];
         yield 'unknown id' => [new Response(404, [], '["Kein Tag mit dieser ID."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
     }
