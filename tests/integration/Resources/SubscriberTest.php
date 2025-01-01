@@ -35,6 +35,22 @@ class SubscriberTest extends IntegrationTestCase
     /**
      * @test
      * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Model::__construct
+     */
+    public function testConstruct(): void
+    {
+        $connection = $this->getConnectionMock(new Response(200, [], json_encode([])));
+        $sut = new Subscriber($connection);
+
+        $this->assertSame(
+            $connection,
+            $this->getValue($sut, 'connection')
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Resources\Subscriber::index
      * @dataProvider indexDataProvider
      */
@@ -652,6 +668,27 @@ class SubscriberTest extends IntegrationTestCase
             $sut,
             'getSubscriberByMailAddress',
             ['myMailAddress']
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Model::convertDataArrayToUrlParameters
+     */
+    public function testConvertDataArrayToUrlParameters()
+    {
+        $sut = $this->getMockBuilder(Subscriber::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertSame(
+            ['fields[field1]' => 'value1'],
+            $this->callMethod(
+                $sut,
+                'convertDataArrayToUrlParameters',
+                [['field1' => 'value1']]
+            )
         );
     }
 }
