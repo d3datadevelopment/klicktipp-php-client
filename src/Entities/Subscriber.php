@@ -123,9 +123,6 @@ class Subscriber extends ArrayCollection
         return $this->get('sms_phone');
     }
 
-    /**
-     * @throws BaseException
-     */
     public function setSmsPhone(string $smsPhone): void
     {
         $this->set('sms_phone', $smsPhone);
@@ -172,9 +169,6 @@ class Subscriber extends ArrayCollection
         return $this->getFields()->get($this->getFieldLongName($fieldId));
     }
 
-    /**
-     * @throws BaseException
-     */
     public function setField(string $fieldId, string $value): void
     {
         $this->set($this->getFieldLongName($fieldId), $value);
@@ -195,6 +189,33 @@ class Subscriber extends ArrayCollection
     public function isTagSet(string $tagId): bool
     {
         return $this->getTags()->contains($tagId);
+    }
+
+    public function clearTags(): void
+    {
+        $tags = $this->getTags();
+        $tags->clear();
+        $this->set('tags', $tags->toArray());
+
+        // use persist method to send to Klicktipp
+    }
+
+    public function addTag(string $tagId): void
+    {
+        $tags = $this->getTags();
+        $tags->add($tagId);
+        $this->set('tags', $tags->toArray());
+
+        // use persist method to send to Klicktipp
+    }
+
+    public function removeTag(string $tagId): void
+    {
+        $tags = $this->getTags();
+        $tags->removeElement($tagId);
+        $this->set('tags', $tags->toArray());
+
+        // use persist method to send to Klicktipp
     }
 
     /**
@@ -292,17 +313,45 @@ class Subscriber extends ArrayCollection
     }
 
     /**
-     * @return bool
+     * @return ?bool
      * @throws BaseException
      */
-    public function persist(): bool
+    public function persist(): ?bool
     {
-        return $this->endpoint?->update(
+        $return = $this->endpoint?->update(
             $this->getId(),
             $this->getFields()->toArray(),
             $this->getEmailAddress(),
             $this->getSmsPhone()
         );
+
+        $this->persistTags();
+
+        return $return;
+    }
+
+    /**
+     * @throws BaseException
+     */
+    protected function persistTags(): void
+    {
+        if (!$this->endpoint instanceof SubscriberEndpoint) {
+            return;
+        }
+
+        $currentTags = $this->endpoint->get( $this->getId() )->getTags();
+
+        $removeTags = array_diff( $currentTags->toArray(), $this->getTags()->toArray() );
+        if ( count( $removeTags ) ) {
+            foreach ( $removeTags as $removeTag ) {
+                $this->endpoint->untag( $this->getEmailAddress(), $removeTag );
+            }
+        }
+
+        $addTags = array_diff( $this->getTags()->toArray(), $currentTags->toArray() );
+        if ( count( $addTags ) ) {
+            $this->endpoint->tag( $this->getEmailAddress(), array_diff( $this->getTags()->toArray(), $currentTags->toArray() ) );
+        }
     }
 
     protected function getDateTimeFromValue($value): ?DateTime

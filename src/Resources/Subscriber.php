@@ -117,11 +117,12 @@ class Subscriber extends Model
     }
 
     /**
+     * add tag
      * @throws BaseException
      */
-    public function tag(string $mailAddress, array $tagIds): string
+    public function tag(string $mailAddress, array $tagIds): bool
     {
-        return current(
+        return (bool) current(
             $this->connection->requestAndParse(
                 'POST',
                 'subscriber/tag.json',
@@ -138,11 +139,12 @@ class Subscriber extends Model
     }
 
     /**
+     * remove tag
      * @throws BaseException
      */
-    public function untag(string $mailAddress, string $tagId): string
+    public function untag(string $mailAddress, string $tagId): bool
     {
-        return current(
+        return (bool) current(
             $this->connection->requestAndParse(
                 'POST',
                 'subscriber/untag.json',
