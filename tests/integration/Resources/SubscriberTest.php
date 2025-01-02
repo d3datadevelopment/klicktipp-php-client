@@ -240,9 +240,16 @@ class SubscriberTest extends IntegrationTestCase
             $this->callMethod(
                 $sut,
                 'subscribe',
-                ['testsubscriber@mydomain.com']
+                ['testsubscriber@mydomain.com', '1234567', '2345678', ['field1' => 'abcd', 'field2' => 'efgh']]
             )
         );
+
+        /** @var RequestInterface $request */
+        $request = current($this->getHistoryContainer())['request'];
+        $requestFormParams = $request->getBody()->getContents();
+        $this->assertMatchesRegularExpression('/fields%5Bfield1%5D=abcd/m', $requestFormParams);
+        $this->assertMatchesRegularExpression('/fields%5Bfield2%5D=efgh/m', $requestFormParams);
+        $this->assertMatchesRegularExpression('/email=testsubscriber%40mydomain.com/m', $requestFormParams);
     }
 
     public static function subscribeDataProvider(): Generator
@@ -342,6 +349,13 @@ class SubscriberTest extends IntegrationTestCase
                 ['testsubscriber@mydomain.com', ['2354758', ' 2354858']]
             )
         );
+
+        /** @var RequestInterface $request */
+        $request = current($this->getHistoryContainer())['request'];
+        $requestFormParams = $request->getBody()->getContents();
+        $this->assertMatchesRegularExpression('/tagids%5B0%5D=2354758/m', $requestFormParams);
+        $this->assertMatchesRegularExpression('/tagids%5B1%5D=2354858/m', $requestFormParams);
+        $this->assertMatchesRegularExpression('/email=testsubscriber%40mydomain.com/m', $requestFormParams);
     }
 
     public static function tagDataProvider(): Generator
@@ -508,9 +522,16 @@ class SubscriberTest extends IntegrationTestCase
             $this->callMethod(
                 $sut,
                 'signin',
-                ['7gefzp8255z8z8469', 'subsriber@mydomain.com']
+                ['7gefzp8255z8z8469', 'subsriber@mydomain.com', ['field1'   => 'abcd', 'field2'   => 'efgh']]
             )
         );
+
+        /** @var RequestInterface $request */
+        $request = current($this->getHistoryContainer())['request'];
+        $requestFormParams = $request->getBody()->getContents();
+        $this->assertMatchesRegularExpression('/fields%5Bfield1%5D=abcd/m', $requestFormParams);
+        $this->assertMatchesRegularExpression('/fields%5Bfield2%5D=efgh/m', $requestFormParams);
+        $this->assertMatchesRegularExpression('/apikey=7gefzp8255z8z8469/m', $requestFormParams);
     }
 
     public static function signinDataProvider(): Generator
@@ -668,27 +689,6 @@ class SubscriberTest extends IntegrationTestCase
             $sut,
             'getSubscriberByMailAddress',
             ['myMailAddress']
-        );
-    }
-
-    /**
-     * @test
-     * @throws ReflectionException
-     * @covers \D3\KlicktippPhpClient\Resources\Model::convertDataArrayToUrlParameters
-     */
-    public function testConvertDataArrayToUrlParameters()
-    {
-        $sut = $this->getMockBuilder(Subscriber::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->assertSame(
-            ['fields[field1]' => 'value1'],
-            $this->callMethod(
-                $sut,
-                'convertDataArrayToUrlParameters',
-                [['field1' => 'value1']]
-            )
         );
     }
 }

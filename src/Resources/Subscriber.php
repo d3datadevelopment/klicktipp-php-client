@@ -82,16 +82,15 @@ class Subscriber extends Model
                 'subscriber.json',
                 [
                     RequestOptions::FORM_PARAMS => array_filter(
-                        array_merge(
-                            $this->convertDataArrayToUrlParameters($fields ?? []),
-                            [
-                                'email' => trim($mailAddress),
-                                'listid' => trim($listId ?? ''),
-                                'tagid' => trim($tagId ?? ''),
-                                'fields' => array_filter($fields ?? []),
-                                'smsnumber' => trim($smsNumber ?? ''),
-                            ]
-                        )
+                        [
+                            'email' => trim($mailAddress),
+                            'listid' => trim($listId ?? ''),
+                            'tagid' => trim($tagId ?? ''),
+                            'fields' => array_filter(
+                                array_map('trim', $fields ?? [])
+                            ),
+                            'smsnumber' => trim($smsNumber ?? ''),
+                        ]
                     ),
                 ]
             )
@@ -127,12 +126,14 @@ class Subscriber extends Model
                 'POST',
                 'subscriber/tag.json',
                 [
-                    RequestOptions::FORM_PARAMS => [
-                        'email' => trim($mailAddress),
-                        'tagids' => implode(',', array_filter(
-                            array_map('trim', $tagIds)
-                        )),
-                    ],
+                    RequestOptions::FORM_PARAMS => array_filter(
+                        [
+                            'email' => trim($mailAddress),
+                            'tagids' => array_filter(
+                                array_map('trim', $tagIds)
+                            ),
+                        ]
+                    ),
                 ]
             )
         );
@@ -189,13 +190,13 @@ class Subscriber extends Model
                 'subscriber/'.urlencode(trim($subscriberId)).'.json',
                 [
                     RequestOptions::FORM_PARAMS => array_filter(
-                        array_merge(
-                            $this->convertDataArrayToUrlParameters($fields ?? []),
-                            [
-                                'newemail' => trim($newEmail ?? ''),
-                                'newsmsnumber' => trim($newSmsNumber ?? ''),
-                            ]
-                        )
+                        [
+                            'newemail' => trim($newEmail ?? ''),
+                            'newsmsnumber' => trim($newSmsNumber ?? ''),
+                            'fields' => array_filter(
+                                array_map('trim', $fields ?? [])
+                            ),
+                        ]
                     ),
                 ]
             )
@@ -219,22 +220,26 @@ class Subscriber extends Model
     /**
      * @throws BaseException
      */
-    public function signin(string $apikey, string $emailAddress, ?array $fields = null, ?string $smsNumber = null): string
-    {
+    public function signin(
+        string $apikey,
+        string $emailAddress,
+        ?array $fields = null,
+        ?string $smsNumber = null
+    ): string {
         return current(
             $this->connection->requestAndParse(
                 'POST',
                 'subscriber/signin.json',
                 [
                     RequestOptions::FORM_PARAMS => array_filter(
-                        array_merge(
-                            $this->convertDataArrayToUrlParameters($fields ?? []),
-                            [
-                                'apikey' => trim($apikey),
-                                'email' => trim($emailAddress),
-                                'smsnumber' => trim($smsNumber ?? ''),
-                            ]
-                        )
+                        [
+                            'apikey' => trim($apikey),
+                            'email' => trim($emailAddress),
+                            'smsnumber' => trim($smsNumber ?? ''),
+                            'fields' => array_filter(
+                                array_map('trim', $fields ?? [])
+                            ),
+                        ]
                     ),
                 ]
             )
