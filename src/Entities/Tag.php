@@ -59,10 +59,10 @@ class Tag extends ArrayCollection
     }
 
     /**
-     * @return bool
+     * @return null|bool
      * @throws BaseException
      */
-    public function persist(): bool
+    public function persist(): ?bool
     {
         return $this->endpoint?->update(
             $this->getId(),

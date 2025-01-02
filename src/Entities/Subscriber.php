@@ -313,7 +313,7 @@ class Subscriber extends ArrayCollection
     }
 
     /**
-     * @return ?bool
+     * @return null|bool
      * @throws BaseException
      */
     public function persist(): ?bool
@@ -339,18 +339,18 @@ class Subscriber extends ArrayCollection
             return;
         }
 
-        $currentTags = $this->endpoint->get( $this->getId() )->getTags();
+        $currentTags = $this->endpoint->get($this->getId())->getTags();
 
-        $removeTags = array_diff( $currentTags->toArray(), $this->getTags()->toArray() );
-        if ( count( $removeTags ) ) {
-            foreach ( $removeTags as $removeTag ) {
-                $this->endpoint->untag( $this->getEmailAddress(), $removeTag );
+        $removeTags = array_diff($currentTags->toArray(), $this->getTags()->toArray());
+        if (count($removeTags)) {
+            foreach ($removeTags as $removeTag) {
+                $this->endpoint->untag($this->getEmailAddress(), $removeTag);
             }
         }
 
-        $addTags = array_diff( $this->getTags()->toArray(), $currentTags->toArray() );
-        if ( count( $addTags ) ) {
-            $this->endpoint->tag( $this->getEmailAddress(), array_diff( $this->getTags()->toArray(), $currentTags->toArray() ) );
+        $addTags = array_diff($this->getTags()->toArray(), $currentTags->toArray());
+        if (count($addTags)) {
+            $this->endpoint->tag($this->getEmailAddress(), $addTags);
         }
     }
 

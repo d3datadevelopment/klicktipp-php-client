@@ -626,8 +626,7 @@ class SubscriberTest extends TestCase
         ?array $newTagList,
         InvokedCount $removeTagInvocation,
         InvokedCount $setTagInvocation
-    )
-    {
+    ) {
         $entityMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getTags'])
@@ -646,7 +645,9 @@ class SubscriberTest extends TestCase
         $endpointMock->expects($removeTagInvocation)->method('untag')->willReturn(true);
 
         $sut = new Subscriber(['id' => 'foo', 'email' => 'mymail@mydomain.tld'], $endpointSet ? $endpointMock : null);
-        if ($newTagList) $sut->set('tags', $newTagList);
+        if ($newTagList) {
+            $sut->set('tags', $newTagList);
+        }
 
         $this->callMethod(
             $sut,
