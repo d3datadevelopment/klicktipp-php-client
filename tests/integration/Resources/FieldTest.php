@@ -18,6 +18,7 @@ namespace D3\KlicktippPhpClient\tests\integration\Resources;
 use D3\KlicktippPhpClient\Entities\FieldList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\Field;
+use D3\KlicktippPhpClient\Resources\Subscriber;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
 use Generator;
 use GuzzleHttp\Psr7\Response;
@@ -55,39 +56,39 @@ class FieldTest extends IntegrationTestCase
     public static function indexDataProvider(): Generator
     {
         yield 'success' => [new Response(200, [], '{
-            "fieldFirstName": "Vorname",
-            "fieldLastName": "Nachname",
-            "fieldCompanyName": "Firma",
-            "fieldStreet1": "Straße 1",
-            "fieldStreet2": "Straße 2",
-            "fieldCity": "Stadt",
-            "fieldState": "Bundesland",
-            "fieldZip": "Postleitzahl",
-            "fieldCountry": "Land",
-            "fieldPrivatePhone": "Telefon (Privat)",
-            "fieldMobilePhone": "Telefon (Mobil)",
-            "fieldPhone": "Telefon",
-            "fieldFax": "Fax",
-            "fieldWebsite": "Website",
-            "fieldBirthday": "Geburtstag",
-            "fieldLeadValue": "LeadValue"
+            "'.Subscriber::FIELD_FIRSTNAME.'": "Vorname",
+            "'.Subscriber::FIELD_LASTNAME.'": "Nachname",
+            "'.Subscriber::FIELD_COMPANYNAME.'": "Firma",
+            "'.Subscriber::FIELD_STREET1.'": "Straße 1",
+            "'.Subscriber::FIELD_STREET2.'": "Straße 2",
+            "'.Subscriber::FIELD_CITY.'": "Stadt",
+            "'.Subscriber::FIELD_STATE.'": "Bundesland",
+            "'.Subscriber::FIELD_ZIP.'": "Postleitzahl",
+            "'.Subscriber::FIELD_COUNTRY.'": "Land",
+            "'.Subscriber::FIELD_PRIVATEPHONE.'": "Telefon (Privat)",
+            "'.Subscriber::FIELD_MOBILEPHONE.'": "Telefon (Mobil)",
+            "'.Subscriber::FIELD_PHONE.'": "Telefon",
+            "'.Subscriber::FIELD_FAX.'": "Fax",
+            "'.Subscriber::FIELD_WEBSITE.'": "Website",
+            "'.Subscriber::FIELD_BIRTHDAY.'": "Geburtstag",
+            "'.Subscriber::FIELD_LEADVALUE.'": "LeadValue"
         }'), new FieldList([
-            "fieldFirstName"    => "Vorname",
-            "fieldLastName"     => "Nachname",
-            "fieldCompanyName"  => "Firma",
-            "fieldStreet1"      => "Straße 1",
-            "fieldStreet2"      => "Straße 2",
-            "fieldCity"         => "Stadt",
-            "fieldState"        => "Bundesland",
-            "fieldZip"          => "Postleitzahl",
-            "fieldCountry"      => "Land",
-            "fieldPrivatePhone" => "Telefon (Privat)",
-            "fieldMobilePhone"  => "Telefon (Mobil)",
-            "fieldPhone"        => "Telefon",
-            "fieldFax"          => "Fax",
-            "fieldWebsite"      => "Website",
-            "fieldBirthday"     => "Geburtstag",
-            "fieldLeadValue"    => "LeadValue",
+            Subscriber::FIELD_FIRSTNAME    => "Vorname",
+            Subscriber::FIELD_LASTNAME     => "Nachname",
+            Subscriber::FIELD_COMPANYNAME  => "Firma",
+            Subscriber::FIELD_STREET1      => "Straße 1",
+            Subscriber::FIELD_STREET2      => "Straße 2",
+            Subscriber::FIELD_CITY         => "Stadt",
+            Subscriber::FIELD_STATE        => "Bundesland",
+            Subscriber::FIELD_ZIP          => "Postleitzahl",
+            Subscriber::FIELD_COUNTRY      => "Land",
+            Subscriber::FIELD_PRIVATEPHONE => "Telefon (Privat)",
+            Subscriber::FIELD_MOBILEPHONE  => "Telefon (Mobil)",
+            Subscriber::FIELD_PHONE        => "Telefon",
+            Subscriber::FIELD_FAX          => "Fax",
+            Subscriber::FIELD_WEBSITE      => "Website",
+            Subscriber::FIELD_BIRTHDAY     => "Geburtstag",
+            Subscriber::FIELD_LEADVALUE    => "LeadValue",
         ])];
         yield 'wrong request type' => [new Response(406, [], '["Bei der Erstellung des Objekt ist ein Fehler aufgetreten."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];

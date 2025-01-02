@@ -19,7 +19,6 @@ use D3\KlicktippPhpClient\Entities\Subscription;
 use D3\KlicktippPhpClient\Entities\SubscriptionList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
-use D3\KlicktippPhpClient\Resources\Tag;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
 use Generator;
 use GuzzleHttp\Psr7\Response;
@@ -110,6 +109,37 @@ class SubscriptionProcessTest extends IntegrationTestCase
             "resendconfirmationemail" => false,
             "usechangeemail" => false,
         ])];
+        yield 'unknown id' => [new Response(404, [], '["Kein Opt-In-Prozess mit dieser ID."]'), null, true];
+        yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::update
+     * @dataProvider updateDataProvider
+     */
+    public function testUpdate(ResponseInterface $response, ?bool $expected, bool $expectException = false)
+    {
+        $sut = new SubscriptionProcess($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $sut,
+                'update',
+                ['470370', 'newName']
+            )
+        );
+    }
+
+    public static function updateDataProvider(): Generator
+    {
+        yield 'success' => [new Response(200, [], '[true]'), true];
         yield 'unknown id' => [new Response(404, [], '["Kein Opt-In-Prozess mit dieser ID."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
     }

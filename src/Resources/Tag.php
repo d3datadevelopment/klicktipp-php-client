@@ -22,6 +22,10 @@ use GuzzleHttp\RequestOptions;
 
 class Tag extends Model
 {
+    public const ID = 'tagid';
+    public const NAME = 'name';
+    public const TEXT = 'text';
+
     /**
      * @throws BaseException
      */
@@ -60,7 +64,7 @@ class Tag extends Model
                 'tag.json',
                 [
                     RequestOptions::FORM_PARAMS => [
-                        'name'    => trim($name),
+                        self::NAME    => trim($name),
                     ],
                 ]
             )
@@ -78,8 +82,8 @@ class Tag extends Model
                 'tag/'.urlencode(trim($tagId)).'.json',
                 [
                     RequestOptions::FORM_PARAMS => array_filter([
-                        'name'    => trim($name ?? ''),
-                        'text'    => trim($text ?? ''),
+                        self::NAME    => trim($name ?? ''),
+                        self::TEXT    => trim($text ?? ''),
                     ]),
                 ]
             )

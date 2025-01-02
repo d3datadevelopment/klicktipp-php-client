@@ -75,7 +75,7 @@ class Connection
      */
     public function getClient(): ClientInterface
     {
-        $this->client ??=  
+        $this->client ??=
             new Client([
                 'base_uri' => self::URL,
                 'headers' => [
@@ -145,6 +145,7 @@ class Connection
             $response->getBody()->rewind();
 
             $response_body = $response->getBody()->getContents();
+
             $result_array = json_decode($response_body, true);
 
             if ($response->getStatusCode() === 204) {

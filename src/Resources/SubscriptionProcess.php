@@ -51,6 +51,24 @@ class SubscriptionProcess extends Model
     /**
      * @throws BaseException
      */
+    public function update(string $listId, ?string $name): bool
+    {
+        return (bool) current(
+            $this->connection->requestAndParse(
+                'PUT',
+                'list/'.urlencode(trim($listId)).'.json',
+                [
+                    RequestOptions::FORM_PARAMS => array_filter([
+                        'name' => trim($name ?? ''),
+                    ]),
+                ]
+            )
+        );
+    }
+
+    /**
+     * @throws BaseException
+     */
     public function redirect(string $listId, string $email): string
     {
         return current(

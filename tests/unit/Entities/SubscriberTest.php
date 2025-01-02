@@ -16,6 +16,7 @@
 namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Subscriber;
+use D3\KlicktippPhpClient\Resources\Subscriber as SubscriberEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,81 +34,81 @@ class SubscriberTest extends TestCase
         parent::setUp();
         $this->entity = new Subscriber(
             [
-                "id"    => "155988456",
-                "listid" => "368370",
-                "optin" => "28.12.2024 22:52:09",
-                "optin_ip" => "0.0.0.0 - By API Request",
-                "email" => "testsubscriber@mydomain.com",
-                "status" => "Opt-In Pending",
-                "bounce" => "Not Bounced",
-                "date" => "2024-12-24",
-                "ip" => "0.0.0.0 - By API Request",
-                "unsubscription" => "unsubscription fixture",
-                "unsubscription_ip" => "0.0.0.0",
-                "referrer" => "referrer fixture",
-                "sms_phone" => "1234567890",
-                "sms_status" => "sms status fixture",
-                "sms_bounce" => "sms bounce fixture",
-                "sms_date" => "2024-12-23",
-                "sms_unsubscription" => "sms unsubscription fixture",
-                "sms_referrer" => "sms referrer fixture",
-                "fieldFirstName" =>  "",
-                "fieldLastName" => "",
-                "fieldCompanyName" => "",
-                "fieldStreet1" => "",
-                "fieldStreet2" =>  "",
-                "fieldCity" => "",
-                "fieldState" =>  "",
-                "fieldZip" => "",
-                "fieldCountry" => "",
-                "fieldPrivatePhone" => "",
-                "fieldMobilePhone" => "",
-                "fieldPhone" => "",
-                "fieldFax" => "",
-                "fieldWebsite" => "",
-                "fieldBirthday" => "",
-                "fieldLeadValue" => "",
-                "tags"  => [
+                SubscriberEndpoint::ID    => "155988456",
+                SubscriberEndpoint::LISTID => "368370",
+                SubscriberEndpoint::OPTIN => "28.12.2024 22:52:09",
+                SubscriberEndpoint::OPTIN_IP => "0.0.0.0 - By API Request",
+                SubscriberEndpoint::EMAIL => "testsubscriber@mydomain.com",
+                SubscriberEndpoint::STATUS => "Opt-In Pending",
+                SubscriberEndpoint::BOUNCE => "Not Bounced",
+                SubscriberEndpoint::DATE => "2024-12-24",
+                SubscriberEndpoint::IP                                => "0.0.0.0 - By API Request",
+                SubscriberEndpoint::UNSUBSCRIPTION                    => "unsubscription fixture",
+                SubscriberEndpoint::UNSUBSCRIPTION_IP                 => "0.0.0.0",
+                SubscriberEndpoint::REFERRER                          => "referrer fixture",
+                SubscriberEndpoint::SMS_PHONE                         => "1234567890",
+                SubscriberEndpoint::SMS_STATUS                        => "sms status fixture",
+                SubscriberEndpoint::SMS_BOUNCE                        => "sms bounce fixture",
+                SubscriberEndpoint::SMS_DATE                          => "2024-12-23",
+                SubscriberEndpoint::SMS_UNSUBSCRIPTION                => "sms unsubscription fixture",
+                SubscriberEndpoint::SMS_REFERRER                      => "sms referrer fixture",
+                SubscriberEndpoint::FIELD_FIRSTNAME =>  "",
+                SubscriberEndpoint::FIELD_LASTNAME           => "",
+                SubscriberEndpoint::FIELD_COMPANYNAME        => "",
+                SubscriberEndpoint::FIELD_STREET1            => "",
+                SubscriberEndpoint::FIELD_STREET2            =>  "",
+                SubscriberEndpoint::FIELD_CITY               => "",
+                SubscriberEndpoint::FIELD_STATE              =>  "",
+                SubscriberEndpoint::FIELD_ZIP                          => "",
+                SubscriberEndpoint::FIELD_COUNTRY                      => "",
+                SubscriberEndpoint::FIELD_PRIVATEPHONE                  => "",
+                SubscriberEndpoint::FIELD_MOBILEPHONE                 => "",
+                SubscriberEndpoint::FIELD_PHONE => "",
+                SubscriberEndpoint::FIELD_FAX => "",
+                SubscriberEndpoint::FIELD_WEBSITE => "",
+                SubscriberEndpoint::FIELD_BIRTHDAY => "",
+                SubscriberEndpoint::FIELD_LEADVALUE => "",
+                SubscriberEndpoint::TAGS  => [
                     "12494453",
                     "12494463",
                 ],
-                "manual_tags"  => [
+                SubscriberEndpoint::MANUALTAGS  => [
                     "12594453"  => "125959453",
                     "12594454"  => "125960453",
                     "12594455"  => "125961453",
                 ],
-                "smart_tags"  => [
+                SubscriberEndpoint::SMARTTAGS  => [
                     "12594456"  => "125959453",
                     "12594457"  => "125960453",
                     "12594458"  => "125961453",
                     "12594459"  => "125961453",
                 ],
-                "campaigns_started"  => [
+                SubscriberEndpoint::CAMPAIGNSSTARTED  => [
                     "12594456"  => "125959453",
                 ],
-                "campaigns_finished"  => [
+                SubscriberEndpoint::CAMPAIGNSFINISHED  => [
                     "12594456"  => "125959453",
                     "12594457"  => "125959453",
                 ],
-                "notification_emails_sent"  => [
+                SubscriberEndpoint::NOTIFICATIONEMAILSSENT  => [
                     "1570256"   => "1730508478",
                     "1570257"   => "1730508479",
                     "1570258"   => "1730508480",
                 ],
-                "notification_emails_opened"  => [
+                SubscriberEndpoint::NOTIFICATIONEMAILSOPENED  => [
                     "1570256"   => "1730508478",
                     "1570257"   => "1730508479",
                     "1570258"   => "1730508480",
                     "1570259"   => "1730508481",
                 ],
-                "notification_emails_clicked"  => [
+                SubscriberEndpoint::NOTIFICATIONEMAILSCLICKED  => [
                     "1570256"   => "1730508478",
                     "1570257"   => "1730508479",
                     "1570258"   => "1730508480",
                     "1570259"   => "1730508481",
                     "1570260"   => "1730508482",
                 ],
-                "notification_emails_viewed"  => [
+                SubscriberEndpoint::NOTIFICATIONEMAILSVIEWED  => [
                     "1570256"   => "1730508478",
                     "1570257"   => "1730508479",
                     "1570258"   => "1730508480",
@@ -115,7 +116,7 @@ class SubscriberTest extends TestCase
                     "1570260"   => "1730508482",
                     "1570261"   => "1730508483",
                 ],
-                "outbound"  => [
+                SubscriberEndpoint::OUTBOUND  => [
                     "1570256"   => "1730508478",
                 ],
             ]
@@ -134,7 +135,7 @@ class SubscriberTest extends TestCase
             'key2' => 'value2',
         ];
 
-        $endpoint = $this->getMockBuilder(\D3\KlicktippPhpClient\Resources\Subscriber::class)
+        $endpoint = $this->getMockBuilder(SubscriberEndpoint::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -342,7 +343,7 @@ class SubscriberTest extends TestCase
     ): void {
         $sut = $this->getMockBuilder(Subscriber::class)
             ->onlyMethods(['set'])
-            ->setConstructorArgs([['id' => 'foo']])
+            ->setConstructorArgs([[SubscriberEndpoint::ID => 'foo']])
             ->getMock();
         $sut->expects($this->once())->method('set')->with(
             $this->identicalTo($fieldName)
@@ -413,8 +414,8 @@ class SubscriberTest extends TestCase
 
     public static function getFieldDataProvider(): Generator
     {
-        yield 'short field name'    => ['FirstName', 'fieldFirstName'];
-        yield 'long field name'    => ['fieldLastName', 'fieldLastName'];
+        yield 'short field name'    => ['FirstName', SubscriberEndpoint::FIELD_FIRSTNAME];
+        yield 'long field name'    => ['fieldLastName', SubscriberEndpoint::FIELD_LASTNAME];
     }
 
     /**
@@ -429,7 +430,7 @@ class SubscriberTest extends TestCase
     ): void {
         $sut = $this->getMockBuilder(Subscriber::class)
             ->onlyMethods(['set'])
-            ->setConstructorArgs([['id' => 'foo']])
+            ->setConstructorArgs([[SubscriberEndpoint::ID => 'foo']])
             ->getMock();
         $sut->expects($this->once())->method('set')->with(
             $this->identicalTo($longFieldName)
@@ -444,8 +445,8 @@ class SubscriberTest extends TestCase
 
     public static function setFieldDataProvider(): Generator
     {
-        yield 'short field name'    => ['FirstName', 'fieldFirstName'];
-        yield 'long field name'    => ['fieldLastName', 'fieldLastName'];
+        yield 'short field name'    => ['FirstName', SubscriberEndpoint::FIELD_FIRSTNAME];
+        yield 'long field name'    => ['fieldLastName', SubscriberEndpoint::FIELD_LASTNAME];
     }
 
     /**
@@ -587,14 +588,14 @@ class SubscriberTest extends TestCase
         InvokedCount $endpointInvocation,
         ?bool $expectedReturn
     ): void {
-        $endpointMock = $this->getMockBuilder(\D3\KlicktippPhpClient\Resources\Subscriber::class)
+        $endpointMock = $this->getMockBuilder(SubscriberEndpoint::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['update'])
             ->getMock();
         $endpointMock->expects($endpointInvocation)->method('update')->willReturn(true);
 
         $sut = $this->getMockBuilder(Subscriber::class)
-            ->setConstructorArgs([['id' => 'foo'], $endpointSet ? $endpointMock : null])
+            ->setConstructorArgs([[SubscriberEndpoint::ID => 'foo'], $endpointSet ? $endpointMock : null])
             ->onlyMethods(['persistTags'])
             ->getMock();
         $sut->expects($this->once())->method('persistTags');
@@ -636,7 +637,7 @@ class SubscriberTest extends TestCase
             "12494463",
         ]));
 
-        $endpointMock = $this->getMockBuilder(\D3\KlicktippPhpClient\Resources\Subscriber::class)
+        $endpointMock = $this->getMockBuilder(SubscriberEndpoint::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['get', 'tag', 'untag'])
             ->getMock();
@@ -644,7 +645,7 @@ class SubscriberTest extends TestCase
         $endpointMock->expects($setTagInvocation)->method('tag')->willReturn(true);
         $endpointMock->expects($removeTagInvocation)->method('untag')->willReturn(true);
 
-        $sut = new Subscriber(['id' => 'foo', 'email' => 'mymail@mydomain.tld'], $endpointSet ? $endpointMock : null);
+        $sut = new Subscriber([SubscriberEndpoint::ID => 'foo', SubscriberEndpoint::EMAIL => 'mymail@mydomain.tld'], $endpointSet ? $endpointMock : null);
         if ($newTagList) {
             $sut->set('tags', $newTagList);
         }

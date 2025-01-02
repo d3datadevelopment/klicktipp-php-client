@@ -22,6 +22,58 @@ use GuzzleHttp\RequestOptions;
 
 class Subscriber extends Model
 {
+    public const ID = 'id';
+    public const LISTID = 'listid';
+    public const OPTIN = 'optin';
+    public const OPTIN_IP = 'optin_ip';
+    public const EMAIL = 'email';
+    public const STATUS = 'status';
+    public const BOUNCE = 'bounce';
+    public const IP = 'ip';
+    public const UNSUBSCRIPTION = 'unsubscription';
+    public const UNSUBSCRIPTION_IP = 'unsubscription_ip';
+    public const SMS_PHONE = 'sms_phone';
+    public const SMS_STATUS = 'sms_status';
+    public const SMS_BOUNCE = 'sms_bounce';
+    public const SMS_DATE = 'sms_date';
+    public const SMS_UNSUBSCRIPTION = 'sms_unsubscription';
+    public const SMS_REFERRER = 'sms_referrer';
+    public const REFERRER = 'referrer';
+    public const DATE = 'date';
+    public const FIELD_FIRSTNAME = 'fieldFirstName';
+    public const FIELD_LASTNAME  = 'fieldLastName';
+    public const FIELD_COMPANYNAME  = 'fieldCompanyName';
+    public const FIELD_STREET1  = 'fieldStreet1';
+    public const FIELD_STREET2  = 'fieldStreet2';
+    public const FIELD_CITY  = 'fieldCity';
+    public const FIELD_STATE  = 'fieldState';
+    public const FIELD_ZIP  = 'fieldZip';
+    public const FIELD_COUNTRY  = 'fieldCountry';
+    public const FIELD_PRIVATEPHONE  = 'fieldPrivatePhone';
+    public const FIELD_MOBILEPHONE  = 'fieldMobilePhone';
+    public const FIELD_PHONE  = 'fieldPhone';
+    public const FIELD_FAX  = 'fieldFax';
+    public const FIELD_WEBSITE  = 'fieldWebsite';
+    public const FIELD_BIRTHDAY  = 'fieldBirthday';
+    public const FIELD_LEADVALUE  = 'fieldLeadValue';
+    public const TAGS  = 'tags';
+    public const MANUALTAGS  = 'manual_tags';
+    public const SMARTTAGS  = 'smart_tags';
+    public const CAMPAIGNSSTARTED  = 'campaigns_started';
+    public const CAMPAIGNSFINISHED  = 'campaigns_finished';
+    public const NOTIFICATIONEMAILSSENT  = 'notification_emails_sent';
+    public const NOTIFICATIONEMAILSOPENED  = 'notification_emails_opened';
+    public const NOTIFICATIONEMAILSCLICKED  = 'notification_emails_clicked';
+    public const NOTIFICATIONEMAILSVIEWED  = 'notification_emails_viewed';
+    public const OUTBOUND  = 'outbound';
+    public const PARAM_TAGID  = 'tagid';
+    public const PARAM_TAGIDS  = 'tagids';
+    public const PARAM_FIELDS  = 'fields';
+    public const PARAM_SMS_NUMBER  = 'smsnumber';
+    public const PARAM_NEW_EMAIL  = 'newemail';
+    public const PARAM_NEW_SMSNUMBER  = 'newsmsnumber';
+    public const PARAM_APIKEY  = 'apikey';
+
     /**
      * @throws BaseException
      */
@@ -59,7 +111,7 @@ class Subscriber extends Model
                 'subscriber/search.json',
                 [
                     RequestOptions::FORM_PARAMS => [
-                        'email' => trim($mailAddress),
+                        self::EMAIL => trim($mailAddress),
                     ],
                 ]
             )
@@ -83,13 +135,13 @@ class Subscriber extends Model
                 [
                     RequestOptions::FORM_PARAMS => array_filter(
                         [
-                            'email' => trim($mailAddress),
-                            'listid' => trim($listId ?? ''),
-                            'tagid' => trim($tagId ?? ''),
-                            'fields' => array_filter(
+                            self::EMAIL => trim($mailAddress),
+                            self::LISTID => trim($listId ?? ''),
+                            self::PARAM_TAGID => trim($tagId ?? ''),
+                            self::PARAM_FIELDS => array_filter(
                                 array_map('trim', $fields ?? [])
                             ),
-                            'smsnumber' => trim($smsNumber ?? ''),
+                            self::PARAM_SMS_NUMBER => trim($smsNumber ?? ''),
                         ]
                     ),
                 ]
@@ -108,7 +160,7 @@ class Subscriber extends Model
                 'subscriber/unsubscribe.json',
                 [
                     RequestOptions::FORM_PARAMS => [
-                        'email' => trim($mailAddress),
+                        self::EMAIL => trim($mailAddress),
                     ],
                 ]
             )
@@ -128,8 +180,8 @@ class Subscriber extends Model
                 [
                     RequestOptions::FORM_PARAMS => array_filter(
                         [
-                            'email' => trim($mailAddress),
-                            'tagids' => array_filter(
+                            self::EMAIL => trim($mailAddress),
+                            self::PARAM_TAGIDS => array_filter(
                                 array_map('trim', $tagIds)
                             ),
                         ]
@@ -151,8 +203,8 @@ class Subscriber extends Model
                 'subscriber/untag.json',
                 [
                     RequestOptions::FORM_PARAMS => [
-                        'email' => trim($mailAddress),
-                        'tagid' => trim($tagId),
+                        self::EMAIL => trim($mailAddress),
+                        self::PARAM_TAGID => trim($tagId),
                     ],
                 ]
             )
@@ -169,7 +221,7 @@ class Subscriber extends Model
             'subscriber/tagged.json',
             [
                 RequestOptions::FORM_PARAMS => [
-                    'tagid' => trim($tagId),
+                    self::PARAM_TAGID => trim($tagId),
                 ],
             ]
         ) ?? [];
@@ -191,9 +243,9 @@ class Subscriber extends Model
                 [
                     RequestOptions::FORM_PARAMS => array_filter(
                         [
-                            'newemail' => trim($newEmail ?? ''),
-                            'newsmsnumber' => trim($newSmsNumber ?? ''),
-                            'fields' => array_filter(
+                            self::PARAM_NEW_EMAIL => trim($newEmail ?? ''),
+                            self::PARAM_NEW_SMSNUMBER => trim($newSmsNumber ?? ''),
+                            self::PARAM_FIELDS => array_filter(
                                 array_map('trim', $fields ?? [])
                             ),
                         ]
@@ -233,10 +285,10 @@ class Subscriber extends Model
                 [
                     RequestOptions::FORM_PARAMS => array_filter(
                         [
-                            'apikey' => trim($apikey),
-                            'email' => trim($emailAddress),
-                            'smsnumber' => trim($smsNumber ?? ''),
-                            'fields' => array_filter(
+                            self::PARAM_APIKEY => trim($apikey),
+                            self::EMAIL => trim($emailAddress),
+                            self::PARAM_SMS_NUMBER => trim($smsNumber ?? ''),
+                            self::PARAM_FIELDS => array_filter(
                                 array_map('trim', $fields ?? [])
                             ),
                         ]
@@ -257,8 +309,8 @@ class Subscriber extends Model
                 'subscriber/signout.json',
                 [
                     RequestOptions::FORM_PARAMS => [
-                        'apikey' => trim($apikey),
-                        'email' => trim($emailAddress),
+                        self::PARAM_APIKEY => trim($apikey),
+                        self::EMAIL => trim($emailAddress),
                     ],
                 ]
             )
@@ -276,8 +328,8 @@ class Subscriber extends Model
                 'subscriber/signoff.json',
                 [
                     RequestOptions::FORM_PARAMS => [
-                        'apikey' => trim($apikey),
-                        'email' => trim($emailAddress),
+                        self::PARAM_APIKEY => trim($apikey),
+                        self::EMAIL => trim($emailAddress),
                     ],
                 ]
             )

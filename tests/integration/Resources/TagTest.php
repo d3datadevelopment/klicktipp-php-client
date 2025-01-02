@@ -93,13 +93,13 @@ class TagTest extends IntegrationTestCase
     public static function getDataProvider(): Generator
     {
         yield 'success' => [new Response(200, [], '{
-            "tagid": "12514414",
-            "name": "tagName2",
-            "text": ""
+            "'.Tag::ID.'": "12514414",
+            "'.Tag::NAME.'": "tagName2",
+            "'.Tag::TEXT.'": ""
         }'), [
-            "tagid"    => "12514414",
-            "name" => "tagName2",
-            "text" => "",
+            Tag::ID    => "12514414",
+            Tag::NAME => "tagName2",
+            Tag::TEXT => "",
         ]];
         yield 'unknown id' => [new Response(404, [], '["Kein Tag mit dieser ID."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
