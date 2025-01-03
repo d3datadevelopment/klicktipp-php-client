@@ -116,12 +116,12 @@ class Account extends ArrayCollection
 
     public function getAccessRights(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::ACCESS_RIGHTS);
+        return new ArrayCollection($this->get(AccountEndpoint::ACCESS_RIGHTS));
     }
 
     public function getSenders(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::SENDERS);
+        return new ArrayCollection($this->get(AccountEndpoint::SENDERS));
     }
 
     public function getGmailPreview(): string
@@ -131,17 +131,17 @@ class Account extends ArrayCollection
 
     public function getLimits(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::LIMITS);
+        return new ArrayCollection($this->get(AccountEndpoint::LIMITS));
     }
 
     public function getPreferences(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::PREFERENCES);
+        return new ArrayCollection($this->get(AccountEndpoint::PREFERENCES));
     }
 
     public function getSettings(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::SETTINGS);
+        return new ArrayCollection($this->get(AccountEndpoint::SETTINGS));
     }
 
     public function canShowOtherAccountInfo(): bool
@@ -156,7 +156,7 @@ class Account extends ArrayCollection
 
     public function getSupport(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::SUPPORT);
+        return new ArrayCollection($this->get(AccountEndpoint::SUPPORT));
     }
 
     public function getLanguage(): string
@@ -166,22 +166,22 @@ class Account extends ArrayCollection
 
     public function getSegments(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::SEGMENTS);
+        return new ArrayCollection($this->get(AccountEndpoint::SEGMENTS));
     }
 
     public function getCustomerData(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::CUSTOMER_DATA);
+        return new ArrayCollection($this->get(AccountEndpoint::CUSTOMER_DATA));
     }
 
     public function getSubscriptionInfo(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::SUBSCRIPTION_INFO);
+        return new ArrayCollection($this->get(AccountEndpoint::SUBSCRIPTION_INFO));
     }
 
     public function getActivePayments(): ArrayCollection
     {
-        return $this->get(AccountEndpoint::ACTIVE_PAYMENTS);
+        return new ArrayCollection($this->get(AccountEndpoint::ACTIVE_PAYMENTS));
     }
 
     /**

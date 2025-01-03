@@ -246,6 +246,7 @@ class SubscriberTest extends TestCase
         yield 'null'    => [null, null];
         yield 'valid date'    => ['2024-12-24', new DateTime('2024-12-24')];
         yield 'valid date time'    => ['28.12.2024 22:52:09', new DateTime('2024-12-28 22:52:09')];
+        yield 'invalid date time'    => ['half-life 3 release date', null];
         yield 'invalid'    => ['', null];
     }
 
