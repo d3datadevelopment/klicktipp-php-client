@@ -15,33 +15,34 @@
 
 namespace D3\KlicktippPhpClient\Entities;
 
+use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Subscription extends ArrayCollection
 {
     public function getListId(): string
     {
-        return $this->get('listid') ?? '';
+        return $this->get(SubscriptionProcess::LISTID) ?? '';
     }
 
     public function getName(): string
     {
-        return $this->get('name') ?? '';
+        return $this->get(SubscriptionProcess::NAME) ?? '';
     }
 
     public function getPendingUrl(): string
     {
-        return $this->get('pendingurl') ?? '';
+        return $this->get(SubscriptionProcess::PENDINGURL) ?? '';
     }
 
     public function getThankyouUrl(): string
     {
-        return $this->get('thankyouurl') ?? '';
+        return $this->get(SubscriptionProcess::THANKYOUURL) ?? '';
     }
 
     public function useSingleOptin(): bool
     {
-        return $this->get('usesingleoptin');
+        return $this->get(SubscriptionProcess::USE_SINGLE_OPTIN);
     }
 
     public function useDoubleOptin(): bool
@@ -51,11 +52,11 @@ class Subscription extends ArrayCollection
 
     public function resendConfirmationEmail(): bool
     {
-        return $this->get('resendconfirmationemail');
+        return $this->get(SubscriptionProcess::RESEND_CONFIRMATION_EMAIL);
     }
 
     public function useChangeEmail(): bool
     {
-        return $this->get('usechangeemail');
+        return $this->get(SubscriptionProcess::USE_CHANGE_EMAIL);
     }
 }

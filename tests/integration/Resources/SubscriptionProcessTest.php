@@ -93,21 +93,21 @@ class SubscriptionProcessTest extends IntegrationTestCase
     public static function getDataProvider(): Generator
     {
         yield 'success' => [new Response(200, [], '{
-            "listid": "470370",
-            "name": "name 1",
-            "pendingurl": "",
-            "thankyouurl": "",
-            "usesingleoptin": false,
-            "resendconfirmationemail": false,
-            "usechangeemail": false
+            "'.SubscriptionProcess::LISTID.'": "470370",
+            "'.SubscriptionProcess::NAME.'": "name 1",
+            "'.SubscriptionProcess::PENDINGURL.'": "",
+            "'.SubscriptionProcess::THANKYOUURL.'": "",
+            "'.SubscriptionProcess::USE_SINGLE_OPTIN.'": false,
+            "'.SubscriptionProcess::RESEND_CONFIRMATION_EMAIL.'": false,
+            "'.SubscriptionProcess::USE_CHANGE_EMAIL.'": false
         }'), new Subscription([
-            "listid"    => "470370",
-            "name"      => "name 1",
-            "pendingurl" => "",
-            "thankyouurl" => "",
-            "usesingleoptin" => false,
-            "resendconfirmationemail" => false,
-            "usechangeemail" => false,
+            SubscriptionProcess::LISTID    => "470370",
+            SubscriptionProcess::NAME      => "name 1",
+            SubscriptionProcess::PENDINGURL => "",
+            SubscriptionProcess::THANKYOUURL => "",
+            SubscriptionProcess::USE_SINGLE_OPTIN => false,
+            SubscriptionProcess::RESEND_CONFIRMATION_EMAIL => false,
+            SubscriptionProcess::USE_CHANGE_EMAIL => false,
         ])];
         yield 'unknown id' => [new Response(404, [], '["Kein Opt-In-Prozess mit dieser ID."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];

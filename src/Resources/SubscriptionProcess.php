@@ -22,6 +22,15 @@ use GuzzleHttp\RequestOptions;
 
 class SubscriptionProcess extends Model
 {
+    public const LISTID = 'listid';
+    public const NAME = 'name';
+    public const PENDINGURL = 'pendingurl';
+    public const THANKYOUURL = 'thankyouurl';
+    public const USE_SINGLE_OPTIN = 'usesingleoptin';
+    public const RESEND_CONFIRMATION_EMAIL = 'resendconfirmationemail';
+    public const USE_CHANGE_EMAIL = 'usechangeemail';
+    public const PARAM_EMAIL = 'email';
+
     /**
      * @throws BaseException
      */
@@ -58,7 +67,7 @@ class SubscriptionProcess extends Model
             'list.json',
             [
                 RequestOptions::FORM_PARAMS => array_filter([
-                    'name' => trim($name ?? ''),
+                    self::NAME => trim($name ?? ''),
                 ]),
             ]
         );
@@ -77,7 +86,7 @@ class SubscriptionProcess extends Model
                 'list/'.urlencode(trim($listId)).'.json',
                 [
                     RequestOptions::FORM_PARAMS => array_filter([
-                        'name' => trim($name ?? ''),
+                        self::NAME => trim($name ?? ''),
                     ]),
                 ]
             )
@@ -95,8 +104,8 @@ class SubscriptionProcess extends Model
                 'list/redirect.json',
                 [
                     RequestOptions::FORM_PARAMS => [
-                        'listid'    => trim($listId),
-                        'email'     => trim($email),
+                        self::LISTID        => trim($listId),
+                        self::PARAM_EMAIL   => trim($email),
                     ],
                 ]
             )
