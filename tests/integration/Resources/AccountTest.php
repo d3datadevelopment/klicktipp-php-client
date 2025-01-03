@@ -15,6 +15,7 @@
 
 namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
+use D3\KlicktippPhpClient\Entities\Account as AccountEntity;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\Account;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
@@ -57,11 +58,11 @@ class AccountTest extends IntegrationTestCase
             "sessid": "nFnp4uLZCnc3dIEl9PrXgjoUuaJSyJIKpLyU9HH5rxw",
             "session_name": "SSESS5bc3b84d3f2031474d7722e94851cff5",
             "account": {
-                "uid": "12345",
-                "status": "1",
-                "usergroup": "16",
-                "email": "info@mydomain.com",
-                "username": "KTAPIdev",
+                "'.Account::UID.'": "12345",
+                "'.Account::STATUS.'": "1",
+                "'.Account::USERGROUP.'": "16",
+                "'.Account::EMAIL.'": "info@mydomain.com",
+                "'.Account::USERNAME.'": "KTAPIdev",
                 "firstname": "Developer",
                 "lastname": "Klicktipper",
                 "company": "Customer GmbH",
@@ -79,11 +80,11 @@ class AccountTest extends IntegrationTestCase
             'sessid' => 'nFnp4uLZCnc3dIEl9PrXgjoUuaJSyJIKpLyU9HH5rxw',
             'session_name' => 'SSESS5bc3b84d3f2031474d7722e94851cff5',
             'account' => [
-                'uid' => '12345',
-                'status' => '1',
-                'usergroup' => '16',
-                'email' => 'info@mydomain.com',
-                'username' => 'KTAPIdev',
+                Account::UID => '12345',
+                Account::STATUS => '1',
+                Account::USERGROUP => '16',
+                Account::EMAIL => 'info@mydomain.com',
+                Account::USERNAME => 'KTAPIdev',
                 'firstname' => 'Developer',
                 'lastname' => 'Klicktipper',
                 'company' => 'Customer GmbH',
@@ -129,5 +130,76 @@ class AccountTest extends IntegrationTestCase
     {
         yield 'success' => [new Response(200, [], '[true]'), true];
         yield 'already logged out' => [new Response(406, [], '["Benutzer nicht eingeloggt."]'), false, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Account::get
+     * @dataProvider getDataProvider
+     */
+    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
+    {
+        $sut = new Account($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $return = $this->callMethod(
+            $sut,
+            'get'
+        );
+
+        $this->assertInstanceOf(AccountEntity::class, $return);
+        $this->assertSame($expected, $return->toArray());
+    }
+
+    public static function getDataProvider(): Generator
+    {
+        yield 'success' => [new Response(200, [], '{
+            "'.Account::UID.'": "1084633",
+            "'.Account::STATUS.'": "1",
+            "'.Account::TIER.'": 1000,
+            "'.Account::USERGROUP.'": "16",
+            "'.Account::EMAIL.'": "mymail@mydomain.com"
+        }'), [
+            Account::UID    => "1084633",
+            Account::STATUS => "1",
+            Account::TIER => 1000,
+            Account::USERGROUP => "16",
+            Account::EMAIL => "mymail@mydomain.com",
+        ]];
+        yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Account::update
+     * @dataProvider updateDataProvider
+     */
+    public function testUpdate(ResponseInterface $response, ?bool $expected, bool $expectException = false)
+    {
+        $sut = new Account($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $sut,
+                'update',
+                []
+            )
+        );
+    }
+
+    public static function updateDataProvider(): Generator
+    {
+        yield 'success' => [new Response(200, [], '[true]'), true];
+        yield 'access denied' => [new Response(403, [], '["Access denied for user"]'), null, true];
     }
 }
