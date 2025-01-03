@@ -102,4 +102,17 @@ class SubscriptionProcess extends Model
             )
         );
     }
+
+    /**
+     * @throws BaseException
+     */
+    public function delete(string $listId): bool
+    {
+        return (bool) current(
+            $this->connection->requestAndParse(
+                'DELETE',
+                'list/'.urlencode(trim($listId)).'.json'
+            )
+        );
+    }
 }

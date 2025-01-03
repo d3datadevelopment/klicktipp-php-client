@@ -199,4 +199,34 @@ class SubscriptionProcessTest extends IntegrationTestCase
         yield 'missing or empty list id' => [new Response(404, [], '["Kein Opt-In-Prozess mit dieser ID."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
     }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::delete
+     * @dataProvider deleteDataProvider
+     */
+    public function testDelete(ResponseInterface $response, ?bool $expected, bool $expectException = false): void
+    {
+        $sut = new SubscriptionProcess($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $sut,
+                'delete',
+                ['2354758']
+            )
+        );
+    }
+
+    public static function deleteDataProvider(): Generator
+    {
+        yield 'success' => [new Response(200, [], '[true]'), true];
+        yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
+    }
 }
