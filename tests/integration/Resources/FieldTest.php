@@ -15,6 +15,7 @@
 
 namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
+use D3\KlicktippPhpClient\Entities\Field as FieldEntity;
 use D3\KlicktippPhpClient\Entities\FieldList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\Field;
@@ -91,6 +92,43 @@ class FieldTest extends IntegrationTestCase
             Subscriber::FIELD_LEADVALUE    => "LeadValue",
         ])];
         yield 'wrong request type' => [new Response(406, [], '["Bei der Erstellung des Objekt ist ein Fehler aufgetreten."]'), null, true];
+        yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Field::get
+     * @dataProvider getDataProvider
+     */
+    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
+    {
+        $sut = new Field($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $return = $this->callMethod(
+            $sut,
+            'get',
+            ['12514414']
+        );
+
+        $this->assertInstanceOf(FieldEntity::class, $return);
+        $this->assertSame($expected, $return->toArray());
+    }
+
+    public static function getDataProvider(): Generator
+    {
+        yield 'success' => [new Response(200, [], '{
+            "'.Field::ID.'": "12514414",
+            "'.Field::NAME.'": "fieldName2"
+        }'), [
+            Field::ID    => "12514414",
+            Field::NAME => "fieldName2",
+        ]];
+        yield 'unknown id' => [new Response(404, [], '["Kein Field mit dieser ID."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
     }
 

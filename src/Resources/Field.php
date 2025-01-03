@@ -15,12 +15,16 @@
 
 namespace D3\KlicktippPhpClient\Resources;
 
+use D3\KlicktippPhpClient\Entities\Field as FieldEntity;
 use D3\KlicktippPhpClient\Entities\FieldList;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use GuzzleHttp\RequestOptions;
 
 class Field extends Model
 {
+    public const ID = 'id';
+    public const NAME = 'name';
+
     /**
      * @throws BaseException
      */
@@ -35,6 +39,19 @@ class Field extends Model
     }
 
     /**
+     * @throws BaseException
+     */
+    public function get(string $fieldId): FieldEntity
+    {
+        $data = $this->connection->requestAndParse(
+            'GET',
+            'field/'.urlencode(trim($fieldId)).'.json'
+        );
+
+        return new FieldEntity($data, $this);
+    }
+
+    /**
      * @return string - new field id
      * @throws BaseException
      */
@@ -46,7 +63,7 @@ class Field extends Model
                 'field.json',
                 [
                     RequestOptions::FORM_PARAMS => [
-                        'name'    => trim($name),
+                        self::NAME    => trim($name),
                     ],
                 ]
             )
@@ -64,7 +81,7 @@ class Field extends Model
                 'field/'.urlencode(trim($fieldId)).'.json',
                 [
                     RequestOptions::FORM_PARAMS => array_filter([
-                        'name'    => trim($name ?? ''),
+                        self::NAME    => trim($name ?? ''),
                     ]),
                 ]
             )
