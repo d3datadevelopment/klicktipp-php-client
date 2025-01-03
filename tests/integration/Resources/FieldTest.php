@@ -93,4 +93,97 @@ class FieldTest extends IntegrationTestCase
         yield 'wrong request type' => [new Response(406, [], '["Bei der Erstellung des Objekt ist ein Fehler aufgetreten."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
     }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Field::create
+     * @dataProvider createDataProvider
+     */
+    public function testCreate(ResponseInterface $response, ?string $expected, bool $expectException = false)
+    {
+        $sut = new Field($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $sut,
+                'create',
+                ['newFieldName']
+            )
+        );
+    }
+
+    public static function createDataProvider(): Generator
+    {
+        yield 'success' => [new Response(200, [], '[12494414]'), '12494414'];
+        yield 'missing or empty field name' => [new Response(406, [], '["Field konnte nicht erstellt werden."]'), null, true];
+        yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Field::update
+     * @dataProvider updateDataProvider
+     */
+    public function testUpdate(ResponseInterface $response, ?bool $expected, bool $expectException = false)
+    {
+        $sut = new Field($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $sut,
+                'update',
+                ['12494414', 'fieldName']
+            )
+        );
+    }
+
+    public static function updateDataProvider(): Generator
+    {
+        yield 'success' => [new Response(200, [], '[true]'), true];
+        yield 'unknown field' => [new Response(404, [], '["Kein Tag mit dieser ID."]'), null, true];
+        yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\Field::delete
+     * @dataProvider deleteDataProvider
+     */
+    public function testDelete(ResponseInterface $response, ?bool $expected, bool $expectException = false)
+    {
+        $sut = new Field($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $sut,
+                'delete',
+                ['12494414']
+            )
+        );
+    }
+
+    public static function deleteDataProvider(): Generator
+    {
+        yield 'success' => [new Response(200, [], '[true]'), true];
+        yield 'unknown field' => [new Response(404, [], '["Kein Field mit dieser ID."]'), null, true];
+        yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
+    }
 }
