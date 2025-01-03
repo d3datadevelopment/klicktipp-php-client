@@ -31,29 +31,29 @@ class Tag extends ArrayCollection
 
     public function getId(): string
     {
-        return $this->get('tagid');
+        return $this->get(TagEndpoint::ID);
     }
 
     public function getName(): string
     {
-        return $this->get('name');
+        return $this->get(TagEndpoint::NAME);
     }
 
     public function setName(string $name): void
     {
-        $this->set('name', $name);
+        $this->set(TagEndpoint::NAME, $name);
 
         // use persist method to send to Klicktipp
     }
 
     public function getText(): string
     {
-        return $this->get('text');
+        return $this->get(TagEndpoint::TEXT);
     }
 
     public function setText(string $text): void
     {
-        $this->set('text', $text);
+        $this->set(TagEndpoint::TEXT, $text);
 
         // use persist method to send to Klicktipp
     }
