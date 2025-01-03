@@ -115,6 +115,31 @@ class SubscriptionProcessTest extends IntegrationTestCase
 
     /**
      * @test
+     * @return void
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::create
+     * @dataProvider getDataProvider
+     */
+    public function testCreate(ResponseInterface $response, ?Subscription $expected, bool $expectException = false)
+    {
+        $sut = new SubscriptionProcess($this->getConnectionMock($response));
+
+        if ($expectException) {
+            $this->expectException(BaseException::class);
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $sut,
+                'create',
+                ['newName']
+            )
+        );
+    }
+
+    /**
+     * @test
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::update
      * @dataProvider updateDataProvider

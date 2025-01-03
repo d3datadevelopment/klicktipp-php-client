@@ -51,6 +51,24 @@ class SubscriptionProcess extends Model
     /**
      * @throws BaseException
      */
+    public function create(?string $name): SubscriptionEntity
+    {
+        $data = $this->connection->requestAndParse(
+            'POST',
+            'list.json',
+            [
+                RequestOptions::FORM_PARAMS => array_filter([
+                    'name' => trim($name ?? ''),
+                ]),
+            ]
+        );
+
+        return new SubscriptionEntity($data);
+    }
+
+    /**
+     * @throws BaseException
+     */
     public function update(string $listId, ?string $name): bool
     {
         return (bool) current(
