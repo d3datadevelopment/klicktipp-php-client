@@ -88,14 +88,20 @@ class Account extends Model
     /**
      * @throws BaseException
      */
-    public function get(): AccountEntity
+    public function get(): array
     {
-        $data = $this->connection->requestAndParse(
+        return $this->connection->requestAndParse(
             'GET',
             'account.json'
         );
+    }
 
-        return new AccountEntity($data, $this);
+    /**
+     * @throws BaseException
+     */
+    public function getEntity(): AccountEntity
+    {
+        return new AccountEntity($this->get(), $this);
     }
 
     /**

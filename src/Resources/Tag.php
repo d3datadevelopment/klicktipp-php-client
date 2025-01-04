@@ -42,14 +42,20 @@ class Tag extends Model
     /**
      * @throws BaseException
      */
-    public function get(string $tagId): TagEntity
+    public function get(string $tagId): array
     {
-        $data = $this->connection->requestAndParse(
+        return $this->connection->requestAndParse(
             'GET',
             'tag/'.urlencode(trim($tagId)).'.json'
         );
+    }
 
-        return new TagEntity($data, $this);
+    /**
+     * @throws BaseException
+     */
+    public function getEntity(string $tagId): TagEntity
+    {
+        return new TagEntity($this->get($tagId), $this);
     }
 
     /**

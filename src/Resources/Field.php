@@ -41,14 +41,20 @@ class Field extends Model
     /**
      * @throws BaseException
      */
-    public function get(string $fieldId): FieldEntity
+    public function get(string $fieldId): array
     {
-        $data = $this->connection->requestAndParse(
+        return $this->connection->requestAndParse(
             'GET',
             'field/'.urlencode(trim($fieldId)).'.json'
         );
+    }
 
-        return new FieldEntity($data, $this);
+    /**
+     * @throws BaseException
+     */
+    public function getEntity(string $fieldId): FieldEntity
+    {
+        return new FieldEntity($this->get($fieldId), $this);
     }
 
     /**

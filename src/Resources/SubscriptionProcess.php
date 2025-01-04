@@ -47,14 +47,20 @@ class SubscriptionProcess extends Model
     /**
      * @throws BaseException
      */
-    public function get(string $listId): SubscriptionEntity
+    public function get(string $listId): array
     {
-        $data = $this->connection->requestAndParse(
+        return $this->connection->requestAndParse(
             'GET',
             'list/'.urlencode(trim($listId)).'.json'
         );
+    }
 
-        return new SubscriptionEntity($data);
+    /**
+     * @throws BaseException
+     */
+    public function getEntity(string $listId): SubscriptionEntity
+    {
+        return new SubscriptionEntity($this->get($listId), $this);
     }
 
     /**

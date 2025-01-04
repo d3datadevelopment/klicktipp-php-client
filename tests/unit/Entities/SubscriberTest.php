@@ -640,9 +640,9 @@ class SubscriberTest extends TestCase
 
         $endpointMock = $this->getMockBuilder(SubscriberEndpoint::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['get', 'tag', 'untag'])
+            ->onlyMethods(['getEntity', 'tag', 'untag'])
             ->getMock();
-        $endpointMock->expects($endpointInvocation)->method('get')->willReturn($entityMock);
+        $endpointMock->expects($endpointInvocation)->method('getEntity')->willReturn($entityMock);
         $endpointMock->expects($setTagInvocation)->method('tag')->willReturn(true);
         $endpointMock->expects($removeTagInvocation)->method('untag')->willReturn(true);
 

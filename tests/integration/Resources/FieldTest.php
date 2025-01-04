@@ -99,6 +99,7 @@ class FieldTest extends IntegrationTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Resources\Field::get
+     * @covers \D3\KlicktippPhpClient\Resources\Field::getEntity
      * @dataProvider getDataProvider
      */
     public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
@@ -111,7 +112,7 @@ class FieldTest extends IntegrationTestCase
 
         $return = $this->callMethod(
             $sut,
-            'get',
+            'getEntity',
             ['12514414']
         );
 

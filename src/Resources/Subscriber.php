@@ -90,14 +90,20 @@ class Subscriber extends Model
     /**
      * @throws BaseException
      */
-    public function get(string $subscriberId): SubscriberEntity
+    public function get(string $subscriberId): array
     {
-        $data = $this->connection->requestAndParse(
+        return $this->connection->requestAndParse(
             'GET',
             'subscriber/'.urlencode(trim($subscriberId)).'.json'
         );
+    }
 
-        return new SubscriberEntity($data, $this);
+    /**
+     * @throws BaseException
+     */
+    public function getEntity(string $subscriberId): SubscriberEntity
+    {
+        return new SubscriberEntity($this->get($subscriberId), $this);
     }
 
     /**
@@ -352,7 +358,7 @@ class Subscriber extends Model
             $id = $this->subscribe($newMailAddress ?? $mailAddress, null, null, $fields, $smsNumber);
         }
 
-        return $this->get($id);
+        return $this->getEntity($id);
     }
 
     /**
@@ -360,7 +366,7 @@ class Subscriber extends Model
      */
     public function getSubscriberByMailAddress(string $mailAddress): SubscriberEntity
     {
-        return $this->get(
+        return $this->getEntity(
             $this->search($mailAddress)
         );
     }

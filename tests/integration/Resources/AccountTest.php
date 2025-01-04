@@ -136,6 +136,7 @@ class AccountTest extends IntegrationTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Resources\Account::get
+     * @covers \D3\KlicktippPhpClient\Resources\Account::getEntity
      * @dataProvider getDataProvider
      */
     public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
@@ -148,7 +149,7 @@ class AccountTest extends IntegrationTestCase
 
         $return = $this->callMethod(
             $sut,
-            'get'
+            'getEntity'
         );
 
         $this->assertInstanceOf(AccountEntity::class, $return);

@@ -339,7 +339,7 @@ class Subscriber extends ArrayCollection
             return;
         }
 
-        $currentTags = $this->endpoint->get($this->getId())->getTags();
+        $currentTags = $this->endpoint->getEntity($this->getId())->getTags();
 
         $removeTags = array_diff($currentTags->toArray(), $this->getTags()->toArray());
         if (count($removeTags)) {

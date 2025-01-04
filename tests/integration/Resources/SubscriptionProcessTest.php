@@ -70,6 +70,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::get
+     * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::getEntity
      * @dataProvider getDataProvider
      */
     public function testGet(ResponseInterface $response, ?Subscription $expected, bool $expectException = false)
@@ -84,7 +85,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
             $expected,
             $this->callMethod(
                 $sut,
-                'get',
+                'getEntity',
                 ['470370']
             )
         );

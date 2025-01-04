@@ -93,6 +93,7 @@ class SubscriberTest extends IntegrationTestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Resources\Subscriber::get
+     * @covers \D3\KlicktippPhpClient\Resources\Subscriber::getEntity
      * @dataProvider getDataProvider
      */
     public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
@@ -105,7 +106,7 @@ class SubscriberTest extends IntegrationTestCase
 
         $return = $this->callMethod(
             $sut,
-            'get',
+            'getEntity',
             ['155988456']
         );
 
@@ -622,14 +623,14 @@ class SubscriberTest extends IntegrationTestCase
 
         $sut = $this->getMockBuilder(Subscriber::class)
             ->setConstructorArgs([$this->getConnectionMock($responses)])
-            ->onlyMethods(['search', 'update', 'subscribe', 'get'])
+            ->onlyMethods(['search', 'update', 'subscribe', 'getEntity'])
             ->getMock();
         $sut->expects($this->once())->method('search')->will(
             $foundId ? $this->returnValue($foundId) : $this->throwException(new BaseException())
         );
         $sut->expects($updateInvocations)->method('update')->willReturn(true);
         $sut->expects($subscribeInvocations)->method('subscribe')->willReturn('myId');
-        $sut->expects($this->once())->method('get')->with(
+        $sut->expects($this->once())->method('getEntity')->with(
             $this->identicalTo('myId')
         )->willReturn($entityMock);
 
@@ -678,10 +679,10 @@ class SubscriberTest extends IntegrationTestCase
 
         $sut = $this->getMockBuilder(Subscriber::class)
             ->setConstructorArgs([$this->getConnectionMock($responses)])
-            ->onlyMethods(['search', 'get'])
+            ->onlyMethods(['search', 'getEntity'])
             ->getMock();
         $sut->expects($this->once())->method('search')->willReturn('myId');
-        $sut->expects($this->once())->method('get')->with(
+        $sut->expects($this->once())->method('getEntity')->with(
             $this->identicalTo('myId')
         )->willReturn(new SubscriberEntity());
 
