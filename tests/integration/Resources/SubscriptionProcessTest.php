@@ -73,7 +73,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::getEntity
      * @dataProvider getDataProvider
      */
-    public function testGet(ResponseInterface $response, ?Subscription $expected, bool $expectException = false)
+    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
     {
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
@@ -81,14 +81,14 @@ class SubscriptionProcessTest extends IntegrationTestCase
             $this->expectException(BaseException::class);
         }
 
-        $this->assertEquals(
-            $expected,
-            $this->callMethod(
-                $sut,
-                'getEntity',
-                ['470370']
-            )
+        $return = $this->callMethod(
+            $sut,
+            'getEntity',
+            ['470370']
         );
+
+        $this->assertInstanceOf(Subscription::class, $return);
+        $this->assertSame($expected, $return->toArray());
     }
 
     public static function getDataProvider(): Generator
@@ -101,7 +101,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
             "'.SubscriptionProcess::USE_SINGLE_OPTIN.'": false,
             "'.SubscriptionProcess::RESEND_CONFIRMATION_EMAIL.'": false,
             "'.SubscriptionProcess::USE_CHANGE_EMAIL.'": false
-        }'), new Subscription([
+        }'), [
             SubscriptionProcess::LISTID    => "470370",
             SubscriptionProcess::NAME      => "name 1",
             SubscriptionProcess::PENDINGURL => "",
@@ -109,7 +109,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
             SubscriptionProcess::USE_SINGLE_OPTIN => false,
             SubscriptionProcess::RESEND_CONFIRMATION_EMAIL => false,
             SubscriptionProcess::USE_CHANGE_EMAIL => false,
-        ])];
+        ]];
         yield 'unknown id' => [new Response(404, [], '["Kein Opt-In-Prozess mit dieser ID."]'), null, true];
         yield 'access denied' => [new Response(403, [], '["API Zugriff verweigert"]'), null, true];
     }
@@ -121,7 +121,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::create
      * @dataProvider getDataProvider
      */
-    public function testCreate(ResponseInterface $response, ?Subscription $expected, bool $expectException = false)
+    public function testCreate(ResponseInterface $response, ?array $expected, bool $expectException = false)
     {
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
@@ -129,14 +129,14 @@ class SubscriptionProcessTest extends IntegrationTestCase
             $this->expectException(BaseException::class);
         }
 
-        $this->assertEquals(
-            $expected,
-            $this->callMethod(
-                $sut,
-                'create',
-                ['newName']
-            )
+        $return = $this->callMethod(
+            $sut,
+            'create',
+            ['newName']
         );
+
+        $this->assertInstanceOf(Subscription::class, $return);
+        $this->assertSame($expected, $return->toArray());
     }
 
     /**

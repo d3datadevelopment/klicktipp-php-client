@@ -15,11 +15,20 @@
 
 namespace D3\KlicktippPhpClient\Entities;
 
+use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Subscription extends ArrayCollection
 {
+    private ?SubscriptionProcess $endpoint;
+
+    public function __construct(array $elements = [], ?SubscriptionProcess $endpoint = null)
+    {
+        $this->endpoint = $endpoint;
+        parent::__construct($elements);
+    }
+
     public function getListId(): string
     {
         return $this->get(SubscriptionProcess::LISTID) ?? '';
@@ -28,6 +37,11 @@ class Subscription extends ArrayCollection
     public function getName(): string
     {
         return $this->get(SubscriptionProcess::NAME) ?? '';
+    }
+
+    public function setName(string $name): void
+    {
+        $this->set(SubscriptionProcess::NAME, $name);
     }
 
     public function getPendingUrl(): string
@@ -58,5 +72,17 @@ class Subscription extends ArrayCollection
     public function useChangeEmail(): bool
     {
         return $this->get(SubscriptionProcess::USE_CHANGE_EMAIL);
+    }
+
+    /**
+     * @return null|bool
+     * @throws BaseException
+     */
+    public function persist(): ?bool
+    {
+        return $this->endpoint?->update(
+            $this->getListId(),
+            $this->getName()
+        );
     }
 }
