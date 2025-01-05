@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Connection;

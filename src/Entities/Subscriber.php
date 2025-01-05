@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\Entities;
 
 use D3\KlicktippPhpClient\Exceptions\BaseException;
@@ -158,9 +160,7 @@ class Subscriber extends ArrayCollection
     public function getFields(): ArrayCollection
     {
         return $this->filter(
-            function ($value, $key) {
-                return str_starts_with($key, 'field');
-            }
+            fn ($value, $key) => str_starts_with($key, 'field')
         );
     }
 

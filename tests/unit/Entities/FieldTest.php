@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Field;
@@ -73,7 +75,7 @@ class FieldTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Field::getName
      * @dataProvider getSomethingDataProvider
      */
-    public function testGetSomething(string $methodName, string $expectedValue)
+    public function testGetSomething(string $methodName, string $expectedValue): void
     {
         $this->assertSame(
             $expectedValue,

@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Subscriber as SubscriberEntity;
@@ -111,7 +113,7 @@ class Subscriber extends Model
      */
     public function search(string $mailAddress): string
     {
-        return current(
+        return (string) current(
             $this->connection->requestAndParse(
                 'POST',
                 'subscriber/search.json',
@@ -328,9 +330,9 @@ class Subscriber extends Model
     /**
      * @throws BaseException
      */
-    public function signoff(string $apikey, string $emailAddress): string
+    public function signoff(string $apikey, string $emailAddress): bool
     {
-        return current(
+        return (bool) current(
             $this->connection->requestAndParse(
                 'POST',
                 'subscriber/signoff.json',

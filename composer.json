@@ -42,7 +42,7 @@
   "scripts": {
     "test": "./vendor/bin/phpunit --no-coverage",
     "check-style": "./vendor/bin/php-cs-fixer fix --verbose --dry-run",
-    "fix-style": "./vendor/bin/php-cs-fixer fix --verbose",
+    "fix-style": "./vendor/bin/php-cs-fixer fix --verbose --allow-risky=yes",
     "check-code": "./vendor/bin/phpstan analyse -c phpstan.neon --no-progress --ansi"
   }
 }

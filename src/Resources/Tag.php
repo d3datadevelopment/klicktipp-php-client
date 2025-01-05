@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Tag as TagEntity;
@@ -64,7 +66,7 @@ class Tag extends Model
      */
     public function create(string $name): string
     {
-        return current(
+        return (string) current(
             $this->connection->requestAndParse(
                 'POST',
                 'tag.json',

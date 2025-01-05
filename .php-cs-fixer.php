@@ -19,7 +19,7 @@ EOF;
 
 $config = new PhpCsFixer\Config();
 return $config->setRules([
-    '@PHP80Migration' => true,
+    '@PHP80Migration:risky' => true,
     '@PSR12' => true,
     'header_comment' => [
         'comment_type' => 'PHPDoc',

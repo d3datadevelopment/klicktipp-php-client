@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
 use D3\KlicktippPhpClient\Entities\Subscriber as SubscriberEntity;
@@ -54,7 +56,7 @@ class SubscriberTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Subscriber::index
      * @dataProvider indexDataProvider
      */
-    public function testIndex(ResponseInterface $response, ?SubscriberList $expected, bool $expectException = false)
+    public function testIndex(ResponseInterface $response, ?SubscriberList $expected, bool $expectException = false): void
     {
         $sut = new Subscriber($this->getConnectionMock($response));
 
@@ -96,7 +98,7 @@ class SubscriberTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Subscriber::getEntity
      * @dataProvider getDataProvider
      */
-    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
+    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false): void
     {
         $sut = new Subscriber($this->getConnectionMock($response));
 

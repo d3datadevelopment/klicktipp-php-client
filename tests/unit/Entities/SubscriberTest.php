@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Subscriber;
@@ -169,7 +171,7 @@ class SubscriberTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsReferrer
      * @dataProvider getSomethingDataProvider
      */
-    public function testGetSomething(string $methodName, string $expectedValue)
+    public function testGetSomething(string $methodName, string $expectedValue): void
     {
         $this->assertSame(
             $expectedValue,
@@ -371,7 +373,7 @@ class SubscriberTest extends TestCase
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getFields
      */
-    public function testGetFields()
+    public function testGetFields(): void
     {
         $fields = $this->callMethod(
             $this->entity,
@@ -466,7 +468,7 @@ class SubscriberTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getOutbounds
      * @dataProvider getTagsDataProvider
      */
-    public function testGetTags(string $methodName, int $expectedCount)
+    public function testGetTags(string $methodName, int $expectedCount): void
     {
         $tags = $this->callMethod(
             $this->entity,
@@ -497,7 +499,7 @@ class SubscriberTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::isTagSet
      * @dataProvider isTagSetDataProvider
      */
-    public function testIsTagSet(string $searchTagId, bool $expected)
+    public function testIsTagSet(string $searchTagId, bool $expected): void
     {
         $tagList = new ArrayCollection([
             "12494453",
@@ -628,7 +630,7 @@ class SubscriberTest extends TestCase
         ?array $newTagList,
         InvokedCount $removeTagInvocation,
         InvokedCount $setTagInvocation
-    ) {
+    ): void {
         $entityMock = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getTags'])
@@ -671,7 +673,7 @@ class SubscriberTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::isManualTagSet
      * @dataProvider isManualTagSetDataProvider
      */
-    public function testIsManualTagSet(string $searchTagId, bool $expected)
+    public function testIsManualTagSet(string $searchTagId, bool $expected): void
     {
         $this->assertSame(
             $expected,
@@ -698,7 +700,7 @@ class SubscriberTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getFinishedCampaignTime
      * @dataProvider getTagDataProvider
      */
-    public function testGetTag(string $testMethodName, string $invokedMethodName)
+    public function testGetTag(string $testMethodName, string $invokedMethodName): void
     {
         $fixtureDate = '2024-12-24 18:00:00';
         $fixture = new DateTime($fixtureDate);

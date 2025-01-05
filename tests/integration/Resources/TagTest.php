@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
 use D3\KlicktippPhpClient\Entities\Tag as TagEntity;
@@ -36,7 +38,7 @@ class TagTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Tag::index
      * @dataProvider indexDataProvider
      */
-    public function testIndex(ResponseInterface $response, ?TagList $expected, bool $expectException = false)
+    public function testIndex(ResponseInterface $response, ?TagList $expected, bool $expectException = false): void
     {
         $sut = new Tag($this->getConnectionMock($response));
 
@@ -73,7 +75,7 @@ class TagTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Tag::getEntity
      * @dataProvider getDataProvider
      */
-    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
+    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false): void
     {
         $sut = new Tag($this->getConnectionMock($response));
 
@@ -112,7 +114,7 @@ class TagTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Tag::create
      * @dataProvider createDataProvider
      */
-    public function testCreate(ResponseInterface $response, ?string $expected, bool $expectException = false)
+    public function testCreate(ResponseInterface $response, ?string $expected, bool $expectException = false): void
     {
         $sut = new Tag($this->getConnectionMock($response));
 
@@ -143,7 +145,7 @@ class TagTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Tag::update
      * @dataProvider updateDataProvider
      */
-    public function testUpdate(ResponseInterface $response, ?bool $expected, bool $expectException = false)
+    public function testUpdate(ResponseInterface $response, ?bool $expected, bool $expectException = false): void
     {
         $sut = new Tag($this->getConnectionMock($response));
 
@@ -174,7 +176,7 @@ class TagTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\Tag::delete
      * @dataProvider deleteDataProvider
      */
-    public function testDelete(ResponseInterface $response, ?bool $expected, bool $expectException = false)
+    public function testDelete(ResponseInterface $response, ?bool $expected, bool $expectException = false): void
     {
         $sut = new Tag($this->getConnectionMock($response));
 

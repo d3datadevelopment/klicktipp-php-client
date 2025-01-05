@@ -13,6 +13,8 @@
  * @link      https://www.oxidmodule.com
  */
 
+declare(strict_types=1);
+
 namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
 use D3\KlicktippPhpClient\Entities\Subscription;
@@ -36,7 +38,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::index
      * @dataProvider indexDataProvider
      */
-    public function testIndex(ResponseInterface $response, ?SubscriptionList $expected, bool $expectException = false)
+    public function testIndex(ResponseInterface $response, ?SubscriptionList $expected, bool $expectException = false): void
     {
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
@@ -73,7 +75,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::getEntity
      * @dataProvider getDataProvider
      */
-    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false)
+    public function testGet(ResponseInterface $response, ?array $expected, bool $expectException = false): void
     {
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
@@ -121,7 +123,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::create
      * @dataProvider getDataProvider
      */
-    public function testCreate(ResponseInterface $response, ?array $expected, bool $expectException = false)
+    public function testCreate(ResponseInterface $response, ?array $expected, bool $expectException = false): void
     {
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
@@ -145,7 +147,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::update
      * @dataProvider updateDataProvider
      */
-    public function testUpdate(ResponseInterface $response, ?bool $expected, bool $expectException = false)
+    public function testUpdate(ResponseInterface $response, ?bool $expected, bool $expectException = false): void
     {
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
@@ -176,7 +178,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
      * @covers \D3\KlicktippPhpClient\Resources\SubscriptionProcess::redirect
      * @dataProvider redirectDataProvider
      */
-    public function testRedirect(ResponseInterface $response, ?string $expected, bool $expectException = false)
+    public function testRedirect(ResponseInterface $response, ?string $expected, bool $expectException = false): void
     {
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
