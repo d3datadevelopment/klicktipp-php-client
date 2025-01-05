@@ -413,14 +413,14 @@ class SubscriberTest extends IntegrationTestCase
             $this->expectException(BaseException::class);
         }
 
-        $this->assertEquals(
-            $expected,
-            $this->callMethod(
-                $sut,
-                'tagged',
-                ['2354758']
-            )
+        $return = $this->callMethod(
+            $sut,
+            'tagged',
+            ['2354758']
         );
+
+        $this->assertInstanceOf(SubscriberList::class, $return);
+        $this->assertSame($expected, $return->toArray());
     }
 
     public static function taggedDataProvider(): Generator

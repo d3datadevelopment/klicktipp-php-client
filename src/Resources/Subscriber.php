@@ -220,9 +220,9 @@ class Subscriber extends Model
     /**
      * @throws BaseException
      */
-    public function tagged(string $tagId): array
+    public function tagged(string $tagId): SubscriberList
     {
-        return $this->connection->requestAndParse(
+        $data = $this->connection->requestAndParse(
             'POST',
             'subscriber/tagged.json',
             [
@@ -231,6 +231,8 @@ class Subscriber extends Model
                 ],
             ]
         ) ?? [];
+
+        return new SubscriberList($data);
     }
 
     /**
