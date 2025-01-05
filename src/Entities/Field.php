@@ -36,7 +36,7 @@ class Field extends ArrayCollection
 
     public function getName(): string
     {
-        return $this->get(FieldEndpoint::NAME);
+        return $this->get(FieldEndpoint::NAME) ?? '';
     }
 
     public function setName(string $name): void
