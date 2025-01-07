@@ -27,23 +27,16 @@ use GuzzleHttp\ClientInterface;
 
 class Klicktipp
 {
-    protected string $client_key;
-
-    protected string $secret_key;
-
     protected ?Connection $connection = null;
 
     /**
      * @throws BaseException
      */
     public function __construct(
-        string $client_key,
-        string $secret_key,
+        protected string $client_key,
+        protected string $secret_key,
         ClientInterface $client = null
     ) {
-        $this->client_key = $client_key;
-        $this->secret_key = $secret_key;
-
         if ($client) {
             $this->getConnection()->setClient($client);
         }
