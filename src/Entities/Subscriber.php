@@ -21,9 +21,8 @@ use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\Subscriber as SubscriberEndpoint;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 
-class Subscriber extends ArrayCollection
+class Subscriber extends Entity
 {
     public const STATUS_SUBSCRIBED = 'subscribed';
     public const BOUNCE_NOTBOUNCED = 'Not Bounced';
@@ -38,12 +37,12 @@ class Subscriber extends ArrayCollection
 
     public function getId(): ?string
     {
-        return $this->get(SubscriberEndpoint::ID);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::ID));
     }
 
     public function getListId(): ?string
     {
-        return $this->get(SubscriberEndpoint::LISTID);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::LISTID));
     }
 
     public function getOptinTime(): ?DateTime
@@ -60,12 +59,12 @@ class Subscriber extends ArrayCollection
 
     public function getOptinIp(): ?string
     {
-        return $this->get(SubscriberEndpoint::OPTIN_IP);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::OPTIN_IP));
     }
 
     public function getEmailAddress(): ?string
     {
-        return $this->get(SubscriberEndpoint::EMAIL);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::EMAIL));
     }
 
     public function changeEmailAddress(string $emailAddress): void
@@ -77,7 +76,7 @@ class Subscriber extends ArrayCollection
 
     public function getStatus(): ?string
     {
-        return $this->get(SubscriberEndpoint::STATUS);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::STATUS));
     }
 
     public function isSubscribed(): bool
@@ -87,7 +86,7 @@ class Subscriber extends ArrayCollection
 
     public function getBounce(): ?string
     {
-        return $this->get(SubscriberEndpoint::BOUNCE);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::BOUNCE));
     }
 
     public function isBounced(): bool
@@ -102,7 +101,7 @@ class Subscriber extends ArrayCollection
 
     public function getIp(): ?string
     {
-        return $this->get(SubscriberEndpoint::IP);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::IP));
     }
 
     public function getUnsubscription(): ?DateTime
@@ -112,17 +111,17 @@ class Subscriber extends ArrayCollection
 
     public function getUnsubscriptionIp(): ?string
     {
-        return $this->get(SubscriberEndpoint::UNSUBSCRIPTION_IP);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::UNSUBSCRIPTION_IP));
     }
 
     public function getReferrer(): ?string
     {
-        return $this->get(SubscriberEndpoint::REFERRER);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::REFERRER));
     }
 
     public function getSmsPhone(): ?string
     {
-        return $this->get(SubscriberEndpoint::SMS_PHONE);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::SMS_PHONE));
     }
 
     public function setSmsPhone(string $smsPhone): void
@@ -134,12 +133,12 @@ class Subscriber extends ArrayCollection
 
     public function getSmsStatus(): ?string
     {
-        return $this->get(SubscriberEndpoint::SMS_STATUS);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::SMS_STATUS));
     }
 
     public function getSmsBounce(): ?string
     {
-        return $this->get(SubscriberEndpoint::SMS_BOUNCE);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::SMS_BOUNCE));
     }
 
     public function getSmsDate(): ?DateTime
@@ -147,14 +146,14 @@ class Subscriber extends ArrayCollection
         return $this->getDateTimeFromValue($this->get(SubscriberEndpoint::SMS_DATE));
     }
 
-    public function getSmsUnsubscription(): ?string
+    public function getSmsUnsubscription(): ?DateTime
     {
         return $this->getDateTimeFromValue($this->get(SubscriberEndpoint::SMS_UNSUBSCRIPTION));
     }
 
     public function getSmsReferrer(): ?string
     {
-        return $this->get(SubscriberEndpoint::SMS_REFERRER);
+        return $this->getStringOrNullValue($this->get(SubscriberEndpoint::SMS_REFERRER));
     }
 
     public function getFields(): ArrayCollection
@@ -181,14 +180,14 @@ class Subscriber extends ArrayCollection
         return str_starts_with($fieldId, 'field') ? trim($fieldId) : 'field'.trim($fieldId);
     }
 
-    public function getTags(): ArrayCollection
+    public function getTags(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::TAGS) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::TAGS));
     }
 
     public function isTagSet(string $tagId): bool
     {
-        return $this->getTags()->contains($tagId);
+        return (bool) $this->getTags()?->contains($tagId);
     }
 
     public function clearTags(): void
@@ -221,14 +220,14 @@ class Subscriber extends ArrayCollection
     /**
      * manuelle Tags
      */
-    public function getManualTags(): ArrayCollection
+    public function getManualTags(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::MANUALTAGS) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::MANUALTAGS));
     }
 
     public function isManualTagSet(string $tagId): bool
     {
-        return $this->getManualTags()->containsKey($tagId);
+        return (bool) $this->getManualTags()?->containsKey($tagId);
     }
 
     public function getManualTagTime(string $tagId): ?DateTime
@@ -236,9 +235,9 @@ class Subscriber extends ArrayCollection
         return $this->getDateTimeFromValue($this->getManualTags()->get($tagId));
     }
 
-    public function getSmartTags(): ArrayCollection
+    public function getSmartTags(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::SMARTTAGS) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::SMARTTAGS));
     }
 
     public function getSmartTagTime(string $tagId): ?DateTime
@@ -249,9 +248,9 @@ class Subscriber extends ArrayCollection
     /**
      * Kampagne gestartet
      */
-    public function getStartedCampaigns(): ArrayCollection
+    public function getStartedCampaigns(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::CAMPAIGNSSTARTED) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::CAMPAIGNSSTARTED));
     }
 
     public function getStartedCampaignTime(string $campaignId): ?DateTime
@@ -262,9 +261,9 @@ class Subscriber extends ArrayCollection
     /**
      * Kampagne beendet
      */
-    public function getFinishedCampaigns(): ArrayCollection
+    public function getFinishedCampaigns(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::CAMPAIGNSFINISHED) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::CAMPAIGNSFINISHED));
     }
 
     public function getFinishedCampaignTime(string $campaignId): ?DateTime
@@ -275,41 +274,41 @@ class Subscriber extends ArrayCollection
     /**
      * Email (Marketing Cockpit) erhalten
      */
-    public function getSentNotificationEmails(): ArrayCollection
+    public function getSentNotificationEmails(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::NOTIFICATIONEMAILSSENT) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::NOTIFICATIONEMAILSSENT));
     }
 
     /**
      * Email (Marketing Cockpit) geoeffnet
      */
-    public function getOpenedNotificationEmails(): ArrayCollection
+    public function getOpenedNotificationEmails(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::NOTIFICATIONEMAILSOPENED) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::NOTIFICATIONEMAILSOPENED));
     }
 
     /**
      * Email (Marketing Cockpit) geklickt
      */
-    public function getClickedNotificationEmails(): ArrayCollection
+    public function getClickedNotificationEmails(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::NOTIFICATIONEMAILSCLICKED) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::NOTIFICATIONEMAILSCLICKED));
     }
 
     /**
      * Email (Marketing Cockpit) im Webbrowser angesehen
      */
-    public function getViewedNotificationEmails(): ArrayCollection
+    public function getViewedNotificationEmails(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::NOTIFICATIONEMAILSVIEWED) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::NOTIFICATIONEMAILSVIEWED));
     }
 
     /**
      * Outbound ausgeloest
      */
-    public function getOutbounds(): ArrayCollection
+    public function getOutbounds(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(SubscriberEndpoint::OUTBOUND) ?? []);
+        return $this->getArrayCollectionFromValue($this->get(SubscriberEndpoint::OUTBOUND));
     }
 
     /**
@@ -351,17 +350,6 @@ class Subscriber extends ArrayCollection
         $addTags = array_diff($this->getTags()->toArray(), $currentTags->toArray());
         if (count($addTags)) {
             $this->endpoint->tag($this->getEmailAddress(), $addTags);
-        }
-    }
-
-    protected function getDateTimeFromValue($value): ?DateTime
-    {
-        try {
-            return $value ?
-                new DateTime((string)$value) :
-                null;
-        } catch (Exception) {
-            return null;
         }
     }
 

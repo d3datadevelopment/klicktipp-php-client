@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Subscriber;
+use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
 use D3\KlicktippPhpClient\Resources\Subscriber as SubscriberEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use DateTime;
@@ -27,7 +28,7 @@ use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use ReflectionException;
 
 /**
- * @coversNothing
+ * @covers \D3\KlicktippPhpClient\Entities\Subscriber
  */
 class SubscriberTest extends TestCase
 {
@@ -52,10 +53,11 @@ class SubscriberTest extends TestCase
                 SubscriberEndpoint::SMS_STATUS                        => "sms status fixture",
                 SubscriberEndpoint::SMS_BOUNCE                        => "sms bounce fixture",
                 SubscriberEndpoint::SMS_DATE                          => "2024-12-23",
-                SubscriberEndpoint::SMS_UNSUBSCRIPTION                => "sms unsubscription fixture",
+// ToDo: is this date real
+                SubscriberEndpoint::SMS_UNSUBSCRIPTION                => "2024-12-24 18:00:00",
                 SubscriberEndpoint::SMS_REFERRER                      => "sms referrer fixture",
-                SubscriberEndpoint::FIELD_FIRSTNAME =>  "",
-                SubscriberEndpoint::FIELD_LASTNAME           => "",
+                SubscriberEndpoint::FIELD_FIRSTNAME =>  "firstName",
+                SubscriberEndpoint::FIELD_LASTNAME           => "lastName",
                 SubscriberEndpoint::FIELD_COMPANYNAME        => "",
                 SubscriberEndpoint::FIELD_STREET1            => "",
                 SubscriberEndpoint::FIELD_STREET2            =>  "",
@@ -169,9 +171,9 @@ class SubscriberTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsStatus
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsBounce
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsReferrer
-     * @dataProvider getSomethingDataProvider
+     * @dataProvider getDataProvider
      */
-    public function testGetSomething(string $methodName, string $expectedValue): void
+    public function testGet(string $methodName, string $expectedValue): void
     {
         $this->assertSame(
             $expectedValue,
@@ -179,7 +181,90 @@ class SubscriberTest extends TestCase
         );
     }
 
-    public static function getSomethingDataProvider(): Generator
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getId
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getListId
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getOptinIp
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getEmailAddress
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getStatus
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getBounce
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getIp
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getUnsubscriptionIp
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getReferrer
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsPhone
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsStatus
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsBounce
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsReferrer
+     * @dataProvider getDataProvider
+     */
+    public function testGetNull(string $testMethod): void
+    {
+        $nullProperties = [];
+        foreach (array_keys($this->entity->toArray()) as $key) {
+            $nullProperties[$key] = null;
+        }
+
+        $sut = new Subscriber($nullProperties);
+
+        $this->assertNull(
+            $this->callMethod(
+                $sut,
+                $testMethod,
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getId
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getListId
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getOptinIp
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getEmailAddress
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getStatus
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getBounce
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getIp
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getUnsubscriptionIp
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getReferrer
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsPhone
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsStatus
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsBounce
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsReferrer
+     * @dataProvider getDataProvider
+     */
+    public function testGetInvalid(string $testMethod): void
+    {
+        $invalidProperties = [
+            SubscriberEndpoint::ID                  => [],
+            SubscriberEndpoint::LISTID              => [],
+            SubscriberEndpoint::OPTIN_IP            => [],
+            SubscriberEndpoint::EMAIL               => [],
+            SubscriberEndpoint::STATUS              => [],
+            SubscriberEndpoint::BOUNCE              => [],
+            SubscriberEndpoint::IP                  => [],
+            SubscriberEndpoint::UNSUBSCRIPTION_IP   => [],
+            SubscriberEndpoint::REFERRER            => [],
+            SubscriberEndpoint::SMS_PHONE           => [],
+            SubscriberEndpoint::SMS_STATUS          => [],
+            SubscriberEndpoint::SMS_BOUNCE          => [],
+            SubscriberEndpoint::SMS_REFERRER        => [],
+        ];
+
+        $sut = new Subscriber($invalidProperties);
+
+        $this->expectException(InvalidCredentialTypeException::class);
+
+        $this->assertNull(
+            $this->callMethod(
+                $sut,
+                $testMethod,
+            )
+        );
+    }
+
+    public static function getDataProvider(): Generator
     {
         yield ['getId', '155988456'];
         yield ['getListId', '368370'];
@@ -214,6 +299,57 @@ class SubscriberTest extends TestCase
         $sut->expects($this->once())->method('getDateTimeFromValue');
 
         $this->callMethod($sut, $methodName);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getOptinTime
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getDate
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getUnsubscription
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsDate
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsUnsubscription
+     * @dataProvider getTimesDataProvider
+     */
+    public function testGetInvalidTimes($methodName): void
+    {
+        $invalidProperties = [
+            SubscriberEndpoint::DATE                => [],
+            SubscriberEndpoint::SMS_DATE            => [],
+            SubscriberEndpoint::OPTIN               => [],
+            SubscriberEndpoint::UNSUBSCRIPTION      => [],
+            SubscriberEndpoint::SMS_UNSUBSCRIPTION  => [],
+        ];
+
+        $sut = new Subscriber($invalidProperties);
+
+        $this->expectException(InvalidCredentialTypeException::class);
+
+        $this->callMethod($sut, $methodName);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getOptinTime
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getDate
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getUnsubscription
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsDate
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmsUnsubscription
+     * @dataProvider getTimesDataProvider
+     */
+    public function testGetNullTimes($methodName): void
+    {
+        $nullProperties = [];
+        foreach (array_keys($this->entity->toArray()) as $key) {
+            $nullProperties[$key] = null;
+        }
+
+        $sut = new Subscriber($nullProperties);
+
+        $this->assertNull(
+            $this->callMethod($sut, $methodName)
+        );
     }
 
     public static function getTimesDataProvider(): Generator
@@ -454,18 +590,17 @@ class SubscriberTest extends TestCase
 
     /**
      * @test
-     * @return void
      * @throws ReflectionException
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getTags
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getManualTags
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmartTags
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getStartedCampaigns
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getFinishedCampaigns
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSentNotificationEmails
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getOpenedNotificationEmails
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getClickedNotificationEmails
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getViewedNotificationEmails
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getOutbounds
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getManualTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getSmartTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getStartedCampaigns
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getFinishedCampaigns
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getSentNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getOpenedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getClickedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getViewedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getOutbounds
      * @dataProvider getTagsDataProvider
      */
     public function testGetTags(string $methodName, int $expectedCount): void
@@ -477,6 +612,78 @@ class SubscriberTest extends TestCase
 
         $this->assertInstanceOf(ArrayCollection::class, $tags);
         $this->assertCount($expectedCount, $tags);
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getManualTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getSmartTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getStartedCampaigns
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getFinishedCampaigns
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getSentNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getOpenedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getClickedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getViewedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getOutbounds
+     * @dataProvider getTagsDataProvider
+     */
+    public function testGetNullTags(string $methodName): void
+    {
+        $nullProperties = [];
+        foreach (array_keys($this->entity->toArray()) as $key) {
+            $nullProperties[$key] = null;
+        }
+
+        $sut = new Subscriber($nullProperties);
+
+        $this->assertNull(
+            $this->callMethod(
+                $sut,
+                $methodName,
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getManualTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getSmartTags
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getStartedCampaigns
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getFinishedCampaigns
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getSentNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getOpenedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getClickedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getViewedNotificationEmails
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::getOutbounds
+     * @dataProvider getTagsDataProvider
+     */
+    public function testGetInvalidTags(string $methodName): void
+    {
+        $invalidProperties = [
+            SubscriberEndpoint::TAGS    => "",
+            SubscriberEndpoint::MANUALTAGS    => "",
+            SubscriberEndpoint::SMARTTAGS    => "",
+            SubscriberEndpoint::CAMPAIGNSSTARTED    => "",
+            SubscriberEndpoint::CAMPAIGNSFINISHED    => "",
+            SubscriberEndpoint::NOTIFICATIONEMAILSSENT    => "",
+            SubscriberEndpoint::NOTIFICATIONEMAILSOPENED    => "",
+            SubscriberEndpoint::NOTIFICATIONEMAILSCLICKED    => "",
+            SubscriberEndpoint::NOTIFICATIONEMAILSVIEWED    => "",
+            SubscriberEndpoint::OUTBOUND    => "",
+        ];
+
+        $sut = new Subscriber($invalidProperties);
+
+        $this->expectException(InvalidCredentialTypeException::class);
+
+        $this->callMethod(
+            $sut,
+            $methodName,
+        );
     }
 
     public static function getTagsDataProvider(): Generator
@@ -693,12 +900,12 @@ class SubscriberTest extends TestCase
 
     /**
      * @test
-     * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getManualTagTime
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getSmartTagTime
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getStartedCampaignTime
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getFinishedCampaignTime
      * @dataProvider getTagDataProvider
+     * @throws ReflectionException
      */
     public function testGetTag(string $testMethodName, string $invokedMethodName): void
     {
