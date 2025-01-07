@@ -21,7 +21,7 @@ use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class Subscription extends ArrayCollection
+class Subscription extends Entity
 {
     private ?SubscriptionProcess $endpoint;
 
@@ -31,14 +31,14 @@ class Subscription extends ArrayCollection
         parent::__construct($elements);
     }
 
-    public function getListId(): string
+    public function getListId(): ?string
     {
-        return $this->get(SubscriptionProcess::LISTID) ?? '';
+        return $this->getStringOrNullValue($this->get(SubscriptionProcess::LISTID));
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
-        return $this->get(SubscriptionProcess::NAME) ?? '';
+        return $this->getStringOrNullValue($this->get(SubscriptionProcess::NAME));
     }
 
     public function setName(string $name): void
@@ -46,34 +46,34 @@ class Subscription extends ArrayCollection
         $this->set(SubscriptionProcess::NAME, $name);
     }
 
-    public function getPendingUrl(): string
+    public function getPendingUrl(): ?string
     {
-        return $this->get(SubscriptionProcess::PENDINGURL) ?? '';
+        return $this->getStringOrNullValue($this->get(SubscriptionProcess::PENDINGURL));
     }
 
-    public function getThankyouUrl(): string
+    public function getThankyouUrl(): ?string
     {
-        return $this->get(SubscriptionProcess::THANKYOUURL) ?? '';
+        return $this->getStringOrNullValue($this->get(SubscriptionProcess::THANKYOUURL));
     }
 
-    public function useSingleOptin(): bool
+    public function useSingleOptin(): ?bool
     {
-        return $this->get(SubscriptionProcess::USE_SINGLE_OPTIN);
+        return $this->getBooleanOrNullValue($this->get(SubscriptionProcess::USE_SINGLE_OPTIN));
     }
 
-    public function useDoubleOptin(): bool
+    public function useDoubleOptin(): ?bool
     {
-        return !$this->useSingleOptin();
+        return is_null($soi = $this->useSingleOptin()) ? null : !$soi;
     }
 
-    public function resendConfirmationEmail(): bool
+    public function resendConfirmationEmail(): ?bool
     {
-        return $this->get(SubscriptionProcess::RESEND_CONFIRMATION_EMAIL);
+        return $this->getBooleanOrNullValue($this->get(SubscriptionProcess::RESEND_CONFIRMATION_EMAIL));
     }
 
-    public function useChangeEmail(): bool
+    public function useChangeEmail(): ?bool
     {
-        return $this->get(SubscriptionProcess::USE_CHANGE_EMAIL);
+        return $this->getBooleanOrNullValue($this->get(SubscriptionProcess::USE_CHANGE_EMAIL));
     }
 
     /**
