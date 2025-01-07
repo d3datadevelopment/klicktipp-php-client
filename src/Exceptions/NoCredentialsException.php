@@ -17,6 +17,8 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient\Exceptions;
 
-class NoCredentialsException extends BaseException
+use Assert\LazyAssertionException;
+
+class NoCredentialsException extends LazyAssertionException implements KlicktippExceptionInterface
 {
 }
