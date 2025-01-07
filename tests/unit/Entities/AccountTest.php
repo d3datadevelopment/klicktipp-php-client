@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Account;
+use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
 use D3\KlicktippPhpClient\Resources\Account as AccountEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -26,7 +27,7 @@ use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use ReflectionException;
 
 /**
- * @coversNothing
+ * @covers \D3\KlicktippPhpClient\Entities\Account
  */
 class AccountTest extends TestCase
 {
@@ -184,9 +185,61 @@ class AccountTest extends TestCase
             $elements,
             $sut->toArray()
         );
-        $this->assertSame(
-            $endpoint,
-            $this->getValue($sut, 'endpoint')
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getId
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getStatus
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getTier
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getUsergroup
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getEmail
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getFirstname
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getLastname
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getCompany
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getWebsite
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getStreet
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getCity
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getState
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getZIP
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getCountry
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getPhone
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getFax
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getAffiliateId
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getAccessRights
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSenders
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getGmailPreview
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getLimits
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getPreferences
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSettings
+     * @covers \D3\KlicktippPhpClient\Entities\Account::canShowOtherAccountInfo
+     * @covers \D3\KlicktippPhpClient\Entities\Account::canShowSupportInfo
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSupport
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getLanguage
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSegments
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getCustomerData
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSubscriptionInfo
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getActivePayments
+     * @dataProvider getDataProvider
+     */
+    public function testGet(string $testMethod, $expected): void
+    {
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $this->entity,
+                $testMethod,
+            )
+        );
+
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $this->entity,
+                $testMethod,
+            )
         );
     }
 
@@ -226,12 +279,103 @@ class AccountTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Account::getActivePayments
      * @dataProvider getDataProvider
      */
-    public function testGet(string $testMethod, $exepcted): void
+    public function testGetNull(string $testMethod): void
     {
-        $this->assertEquals(
-            $exepcted,
+        $nullProperties = [];
+        foreach (array_keys($this->entity->toArray()) as $key) {
+            $nullProperties[$key] = null;
+        }
+
+        $sut = new Account($nullProperties);
+
+        $this->assertNull(
             $this->callMethod(
-                $this->entity,
+                $sut,
+                $testMethod,
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getId
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getStatus
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getTier
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getUsergroup
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getEmail
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getFirstname
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getLastname
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getCompany
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getWebsite
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getStreet
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getCity
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getState
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getZIP
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getCountry
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getPhone
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getFax
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getAffiliateId
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getAccessRights
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSenders
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getGmailPreview
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getLimits
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getPreferences
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSettings
+     * @covers \D3\KlicktippPhpClient\Entities\Account::canShowOtherAccountInfo
+     * @covers \D3\KlicktippPhpClient\Entities\Account::canShowSupportInfo
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSupport
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getLanguage
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSegments
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getCustomerData
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getSubscriptionInfo
+     * @covers \D3\KlicktippPhpClient\Entities\Account::getActivePayments
+     * @dataProvider getDataProvider
+     */
+    public function testGetInvalidType(string $testMethod): void
+    {
+        $invalidProperties = [
+            AccountEndpoint::UID        => [],
+            AccountEndpoint::STATUS     => [],
+            AccountEndpoint::TIER       => [],
+            AccountEndpoint::USERGROUP => [],
+            AccountEndpoint::USERNAME => [],
+            AccountEndpoint::EMAIL => [],
+            AccountEndpoint::FIRSTNAME => [],
+            AccountEndpoint::LASTNAME => [],
+            AccountEndpoint::COMPANY => [],
+            AccountEndpoint::WEBSITE => [],
+            AccountEndpoint::STREET => [],
+            AccountEndpoint::CITY => [],
+            AccountEndpoint::STATE => [],
+            AccountEndpoint::ZIP => [],
+            AccountEndpoint::COUNTRY => [],
+            AccountEndpoint::PHONE => [],
+            AccountEndpoint::FAX => [],
+            AccountEndpoint::AFFILIATE_ID => [],
+            AccountEndpoint::ACCESS_RIGHTS => 'string',
+            AccountEndpoint::SENDERS => 'string',
+            AccountEndpoint::GMAIL_PREVIEW => [],
+            AccountEndpoint::LIMITS => 'string',
+            AccountEndpoint::PREFERENCES => 'string',
+            AccountEndpoint::SETTINGS => 'string',
+            AccountEndpoint::SHOW_OTHER_ACCOUNT_INFO => [],
+            AccountEndpoint::SHOW_SUPPORT_INFO => [],
+            AccountEndpoint::SUPPORT => 'string',
+            AccountEndpoint::LANGUAGE => [],
+            AccountEndpoint::SEGMENTS => 'string',
+            AccountEndpoint::CUSTOMER_DATA => 'string',
+            AccountEndpoint::SUBSCRIPTION_INFO => 'string',
+            AccountEndpoint::ACTIVE_PAYMENTS => 'string',
+        ];
+
+        $sut = new Account($invalidProperties);
+
+        $this->expectException(InvalidCredentialTypeException::class);
+
+        $this->assertNull(
+            $this->callMethod(
+                $sut,
                 $testMethod,
             )
         );
@@ -395,5 +539,122 @@ class AccountTest extends TestCase
     {
         yield 'has endpoint'    => [true, self::once(), true];
         yield 'has no endpoint'    => [false, self::never(), null];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Entity::getArrayCollectionFromValue
+     * @dataProvider getArrayCollectionFromValueDataProvider
+     */
+    public function testGetArrayCollectionFromValue($value, ?ArrayCollection $expected, bool $expectException): void
+    {
+        if ($expectException) {
+            $this->expectException( InvalidCredentialTypeException::class );
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $this->entity,
+                'getArrayCollectionFromValue',
+                [$value]
+            )
+        );
+    }
+
+    public static function getArrayCollectionFromValueDataProvider(): Generator
+    {
+        yield 'ArrayCollection' => [['foo' => 'bar'], new ArrayCollection(['foo'   => 'bar']), false];
+        yield 'null' => [null, null, false];
+        yield 'wrong type' => ['string', null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Entity::getStringOrNullValue
+     * @dataProvider getStringOrNullValueDataProvider
+     */
+    public function testGetStringOrNullValue($value, ?string $expected, bool $expectException): void
+    {
+        if ($expectException) {
+            $this->expectException( InvalidCredentialTypeException::class );
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $this->entity,
+                'getStringOrNullValue',
+                [$value]
+            )
+        );
+    }
+
+    public static function getStringOrNullValueDataProvider(): Generator
+    {
+        yield 'string' => ['foobar', "foobar", false];
+        yield 'null' => [null, null, false];
+        yield 'wrong type' => [[], null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Entity::getIntOrNullValue
+     * @dataProvider getIntOrNullValueDataProvider
+     */
+    public function testGetIntOrNullValue($value, ?int $expected, bool $expectException): void
+    {
+        if ($expectException) {
+            $this->expectException( InvalidCredentialTypeException::class );
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $this->entity,
+                'getIntOrNullValue',
+                [$value]
+            )
+        );
+    }
+
+    public static function getIntOrNullValueDataProvider(): Generator
+    {
+        yield 'int' => [10000, 10000, false];
+        yield 'null' => [null, null, false];
+        yield 'wrong type' => [[], null, true];
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Entity::getBooleanOrNullValue
+     * @dataProvider getBooleanOrNullValueDataProvider
+     */
+    public function testGetBooleanOrNullValue($value, ?bool $expected, bool $expectException): void
+    {
+        if ($expectException) {
+            $this->expectException( InvalidCredentialTypeException::class );
+        }
+
+        $this->assertEquals(
+            $expected,
+            $this->callMethod(
+                $this->entity,
+                'getBooleanOrNullValue',
+                [$value]
+            )
+        );
+    }
+
+    public static function getBooleanOrNullValueDataProvider(): Generator
+    {
+        yield 'true' => [true, true, false];
+        yield 'false' => [false, false, false];
+        yield 'null' => [null, null, false];
+        yield 'wrong type' => [[], null, true];
     }
 }

@@ -18,10 +18,11 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\Entities;
 
 use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
 use D3\KlicktippPhpClient\Resources\Account as AccountEndpoint;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class Account extends ArrayCollection
+class Account extends Entity
 {
     private ?AccountEndpoint $endpoint;
 
@@ -31,159 +32,162 @@ class Account extends ArrayCollection
         parent::__construct($elements);
     }
 
-    public function getId(): string
+    /**
+     * @throws InvalidCredentialTypeException
+     */
+    public function getId(): ?string
     {
-        return $this->get(AccountEndpoint::UID);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::UID));
     }
 
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
-        return $this->get(AccountEndpoint::STATUS);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::STATUS));
     }
 
-    public function getTier(): int
+    public function getTier(): ?int
     {
-        return (int) $this->get(AccountEndpoint::TIER);
+        return $this->getIntOrNullValue($this->get(AccountEndpoint::TIER));
     }
 
-    public function getUsergroup(): string
+    public function getUsergroup(): ?string
     {
-        return $this->get(AccountEndpoint::USERGROUP);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::USERGROUP));
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
-        return $this->get(AccountEndpoint::EMAIL);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::EMAIL));
     }
 
-    public function getFirstname(): string
+    public function getFirstname(): ?string
     {
-        return $this->get(AccountEndpoint::FIRSTNAME);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::FIRSTNAME));
     }
 
-    public function getLastname(): string
+    public function getLastname(): ?string
     {
-        return $this->get(AccountEndpoint::LASTNAME);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::LASTNAME));
     }
 
-    public function getCompany(): string
+    public function getCompany(): ?string
     {
-        return $this->get(AccountEndpoint::COMPANY);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::COMPANY));
     }
 
-    public function getWebsite(): string
+    public function getWebsite(): ?string
     {
-        return $this->get(AccountEndpoint::WEBSITE);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::WEBSITE));
     }
 
-    public function getStreet(): string
+    public function getStreet(): ?string
     {
-        return $this->get(AccountEndpoint::STREET);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::STREET));
     }
 
-    public function getCity(): string
+    public function getCity(): ?string
     {
-        return $this->get(AccountEndpoint::CITY);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::CITY));
     }
 
-    public function getState(): string
+    public function getState(): ?string
     {
-        return $this->get(AccountEndpoint::STATE);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::STATE));
     }
 
-    public function getZIP(): string
+    public function getZIP(): ?string
     {
-        return $this->get(AccountEndpoint::ZIP);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::ZIP));
     }
 
-    public function getCountry(): string
+    public function getCountry(): ?string
     {
-        return $this->get(AccountEndpoint::COUNTRY);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::COUNTRY));
     }
 
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
-        return $this->get(AccountEndpoint::PHONE);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::PHONE));
     }
 
-    public function getFax(): string
+    public function getFax(): ?string
     {
-        return $this->get(AccountEndpoint::FAX);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::FAX));
     }
 
-    public function getAffiliateId(): string
+    public function getAffiliateId(): ?string
     {
-        return $this->get(AccountEndpoint::AFFILIATE_ID);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::AFFILIATE_ID));
     }
 
-    public function getAccessRights(): ArrayCollection
+    public function getAccessRights(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::ACCESS_RIGHTS));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::ACCESS_RIGHTS));
     }
 
-    public function getSenders(): ArrayCollection
+    public function getSenders(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::SENDERS));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::SENDERS));
     }
 
-    public function getGmailPreview(): string
+    public function getGmailPreview(): ?string
     {
-        return $this->get(AccountEndpoint::GMAIL_PREVIEW);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::GMAIL_PREVIEW));
     }
 
-    public function getLimits(): ArrayCollection
+    public function getLimits(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::LIMITS));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::LIMITS));
     }
 
-    public function getPreferences(): ArrayCollection
+    public function getPreferences(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::PREFERENCES));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::PREFERENCES));
     }
 
-    public function getSettings(): ArrayCollection
+    public function getSettings(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::SETTINGS));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::SETTINGS));
     }
 
-    public function canShowOtherAccountInfo(): bool
+    public function canShowOtherAccountInfo(): ?bool
     {
-        return (bool) $this->get(AccountEndpoint::SHOW_OTHER_ACCOUNT_INFO);
+        return $this->getBooleanOrNullValue($this->get(AccountEndpoint::SHOW_OTHER_ACCOUNT_INFO));
     }
 
-    public function canShowSupportInfo(): bool
+    public function canShowSupportInfo(): ?bool
     {
-        return (bool) $this->get(AccountEndpoint::SHOW_SUPPORT_INFO);
+        return $this->getBooleanOrNullValue($this->get(AccountEndpoint::SHOW_SUPPORT_INFO));
     }
 
-    public function getSupport(): ArrayCollection
+    public function getSupport(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::SUPPORT));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::SUPPORT));
     }
 
-    public function getLanguage(): string
+    public function getLanguage(): ?string
     {
-        return $this->get(AccountEndpoint::LANGUAGE);
+        return $this->getStringOrNullValue($this->get(AccountEndpoint::LANGUAGE));
     }
 
-    public function getSegments(): ArrayCollection
+    public function getSegments(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::SEGMENTS));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::SEGMENTS));
     }
 
-    public function getCustomerData(): ArrayCollection
+    public function getCustomerData(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::CUSTOMER_DATA));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::CUSTOMER_DATA));
     }
 
-    public function getSubscriptionInfo(): ArrayCollection
+    public function getSubscriptionInfo(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::SUBSCRIPTION_INFO));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::SUBSCRIPTION_INFO));
     }
 
-    public function getActivePayments(): ArrayCollection
+    public function getActivePayments(): ?ArrayCollection
     {
-        return new ArrayCollection($this->get(AccountEndpoint::ACTIVE_PAYMENTS));
+        return $this->getArrayCollectionFromValue($this->get(AccountEndpoint::ACTIVE_PAYMENTS));
     }
 
     /**
