@@ -19,9 +19,8 @@ namespace D3\KlicktippPhpClient\Entities;
 
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\Field as FieldEndpoint;
-use Doctrine\Common\Collections\ArrayCollection;
 
-class Field extends ArrayCollection
+class Field extends Entity
 {
     private ?FieldEndpoint $endpoint;
 
@@ -31,14 +30,14 @@ class Field extends ArrayCollection
         parent::__construct($elements);
     }
 
-    public function getId(): string
+    public function getId(): ?string
     {
-        return $this->get(FieldEndpoint::ID);
+        return $this->getStringOrNullValue($this->get(FieldEndpoint::ID));
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
-        return $this->get(FieldEndpoint::NAME) ?? '';
+        return $this->getStringOrNullValue($this->get(FieldEndpoint::NAME));
     }
 
     public function setName(string $name): void

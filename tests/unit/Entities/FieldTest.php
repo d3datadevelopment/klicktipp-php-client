@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Field;
+use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
 use D3\KlicktippPhpClient\Resources\Field as FieldEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use Generator;
@@ -73,9 +74,9 @@ class FieldTest extends TestCase
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Entities\Field::getId
      * @covers \D3\KlicktippPhpClient\Entities\Field::getName
-     * @dataProvider getSomethingDataProvider
+     * @dataProvider getDataProvider
      */
-    public function testGetSomething(string $methodName, string $expectedValue): void
+    public function testGet(string $methodName, string $expectedValue): void
     {
         $this->assertSame(
             $expectedValue,
@@ -83,7 +84,57 @@ class FieldTest extends TestCase
         );
     }
 
-    public static function getSomethingDataProvider(): Generator
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Field::getId
+     * @covers \D3\KlicktippPhpClient\Entities\Field::getName
+     * @dataProvider getDataProvider
+     */
+    public function testGetNull(string $testMethod): void
+    {
+        $nullProperties = [];
+        foreach (array_keys($this->entity->toArray()) as $key) {
+            $nullProperties[$key] = null;
+        }
+
+        $sut = new Field($nullProperties);
+
+        $this->assertNull(
+            $this->callMethod(
+                $sut,
+                $testMethod,
+            )
+        );
+    }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Field::getId
+     * @covers \D3\KlicktippPhpClient\Entities\Field::getName
+     * @dataProvider getDataProvider
+     */
+    public function testGetInvalid(string $testMethod): void
+    {
+        $invalidProperties = [
+            FieldEndpoint::ID    => [],
+            FieldEndpoint::NAME  => [],
+        ];
+
+        $sut = new Field($invalidProperties);
+
+        $this->expectException(InvalidCredentialTypeException::class);
+
+        $this->assertNull(
+            $this->callMethod(
+                $sut,
+                $testMethod,
+            )
+        );
+    }
+
+    public static function getDataProvider(): Generator
     {
         yield ['getId', '155988456'];
         yield ['getName', 'fieldName'];
