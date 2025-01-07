@@ -19,9 +19,8 @@ namespace D3\KlicktippPhpClient\Entities;
 
 use D3\KlicktippPhpClient\Exceptions\BaseException;
 use D3\KlicktippPhpClient\Resources\Tag as TagEndpoint;
-use Doctrine\Common\Collections\ArrayCollection;
 
-class Tag extends ArrayCollection
+class Tag extends Entity
 {
     private ?TagEndpoint $endpoint;
 
@@ -31,14 +30,14 @@ class Tag extends ArrayCollection
         parent::__construct($elements);
     }
 
-    public function getId(): string
+    public function getId(): ?string
     {
-        return $this->get(TagEndpoint::ID);
+        return $this->getStringOrNullValue($this->get(TagEndpoint::ID));
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
-        return $this->get(TagEndpoint::NAME);
+        return $this->getStringOrNullValue($this->get(TagEndpoint::NAME));
     }
 
     public function setName(string $name): void
@@ -48,9 +47,9 @@ class Tag extends ArrayCollection
         // use persist method to send to Klicktipp
     }
 
-    public function getText(): string
+    public function getText(): ?string
     {
-        return $this->get(TagEndpoint::TEXT);
+        return $this->getStringOrNullValue($this->get(TagEndpoint::TEXT));
     }
 
     public function setText(string $text): void
