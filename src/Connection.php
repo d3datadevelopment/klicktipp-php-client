@@ -17,8 +17,10 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient;
 
+use Assert\Assert;
 use Composer\InstalledVersions;
 use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\NoCredentialsException;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\CookieJar;
@@ -47,6 +49,14 @@ class Connection
 
     public function __construct(string $client_key, string $secret_key)
     {
+        Assert::lazy()
+            ->setExceptionClass(NoCredentialsException::class)
+            ->that($client_key, 'client_key')
+            ->notBlank()
+            ->that($secret_key, 'secret_key')
+            ->notBlank()
+            ->verifyNow();
+
         $this->client_key = $client_key;
         $this->secret_key = $secret_key;
         $this->cookies_jar = new CookieJar();
