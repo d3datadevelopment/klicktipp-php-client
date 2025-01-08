@@ -19,7 +19,8 @@ namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Subscription as SubscriptionEntity;
 use D3\KlicktippPhpClient\Entities\SubscriptionList;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\ResponseContentException;
 use GuzzleHttp\RequestOptions;
 
 class SubscriptionProcess extends Model
@@ -34,7 +35,8 @@ class SubscriptionProcess extends Model
     public const PARAM_EMAIL = 'email';
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function index(): SubscriptionList
     {
@@ -47,7 +49,8 @@ class SubscriptionProcess extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function get(string $listId): array
     {
@@ -58,7 +61,7 @@ class SubscriptionProcess extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function getEntity(string $listId): SubscriptionEntity
     {
@@ -66,7 +69,8 @@ class SubscriptionProcess extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function create(?string $name): SubscriptionEntity
     {
@@ -84,7 +88,8 @@ class SubscriptionProcess extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function update(string $listId, ?string $name): bool
     {
@@ -102,7 +107,8 @@ class SubscriptionProcess extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function redirect(string $listId, string $email): string
     {
@@ -121,7 +127,8 @@ class SubscriptionProcess extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function delete(string $listId): bool
     {

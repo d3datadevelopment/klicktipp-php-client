@@ -19,7 +19,8 @@ namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Field as FieldEntity;
 use D3\KlicktippPhpClient\Entities\FieldList;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\ResponseContentException;
 use GuzzleHttp\RequestOptions;
 
 class Field extends Model
@@ -28,7 +29,8 @@ class Field extends Model
     public const NAME = 'name';
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function index(): FieldList
     {
@@ -41,7 +43,8 @@ class Field extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function get(string $fieldId): array
     {
@@ -52,7 +55,7 @@ class Field extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function getEntity(string $fieldId): FieldEntity
     {
@@ -61,7 +64,8 @@ class Field extends Model
 
     /**
      * @return string - new field id
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function create(string $name): string
     {
@@ -79,7 +83,8 @@ class Field extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function update(string $fieldId, ?string $name = null): bool
     {
@@ -97,7 +102,8 @@ class Field extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function delete(string $fieldId): bool
     {

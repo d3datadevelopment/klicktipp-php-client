@@ -19,7 +19,8 @@ namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Tag as TagEntity;
 use D3\KlicktippPhpClient\Entities\TagList;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\ResponseContentException;
 use GuzzleHttp\RequestOptions;
 
 class Tag extends Model
@@ -29,7 +30,8 @@ class Tag extends Model
     public const TEXT = 'text';
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function index(): TagList
     {
@@ -42,7 +44,8 @@ class Tag extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function get(string $tagId): array
     {
@@ -53,7 +56,8 @@ class Tag extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function getEntity(string $tagId): TagEntity
     {
@@ -62,7 +66,8 @@ class Tag extends Model
 
     /**
      * @return string - new tag id
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function create(string $name): string
     {
@@ -80,7 +85,8 @@ class Tag extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function update(string $tagId, ?string $name = null, ?string $text = null): bool
     {
@@ -99,7 +105,8 @@ class Tag extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function delete(string $tagId): bool
     {

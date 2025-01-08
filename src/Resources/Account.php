@@ -18,7 +18,8 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Account as AccountEntity;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\ResponseContentException;
 use GuzzleHttp\RequestOptions;
 
 class Account extends Model
@@ -58,7 +59,8 @@ class Account extends Model
     public const PASSWORD = 'password';
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function login(): array
     {
@@ -75,7 +77,8 @@ class Account extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function logout(): bool
     {
@@ -88,7 +91,8 @@ class Account extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function get(): array
     {
@@ -99,7 +103,7 @@ class Account extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function getEntity(): AccountEntity
     {
@@ -107,7 +111,8 @@ class Account extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function update(): bool
     {

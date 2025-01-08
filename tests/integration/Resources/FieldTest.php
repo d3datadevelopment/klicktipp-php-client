@@ -19,7 +19,7 @@ namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
 use D3\KlicktippPhpClient\Entities\Field as FieldEntity;
 use D3\KlicktippPhpClient\Entities\FieldList;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Resources\Field;
 use D3\KlicktippPhpClient\Resources\Subscriber;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
@@ -44,7 +44,7 @@ class FieldTest extends IntegrationTestCase
         $sut = new Field($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -109,7 +109,7 @@ class FieldTest extends IntegrationTestCase
         $sut = new Field($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $return = $this->callMethod(
@@ -146,7 +146,7 @@ class FieldTest extends IntegrationTestCase
         $sut = new Field($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -177,7 +177,7 @@ class FieldTest extends IntegrationTestCase
         $sut = new Field($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -208,7 +208,7 @@ class FieldTest extends IntegrationTestCase
         $sut = new Field($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(

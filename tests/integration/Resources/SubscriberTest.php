@@ -19,7 +19,8 @@ namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
 use D3\KlicktippPhpClient\Entities\Subscriber as SubscriberEntity;
 use D3\KlicktippPhpClient\Entities\SubscriberList;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\KlicktippExceptionInterface;
 use D3\KlicktippPhpClient\Resources\Subscriber;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
 use Generator;
@@ -61,7 +62,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -103,7 +104,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(KlicktippExceptionInterface::class);
         }
 
         $return = $this->callMethod(
@@ -204,7 +205,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(KlicktippExceptionInterface::class);
         }
 
         $this->assertEquals(
@@ -235,7 +236,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -308,7 +309,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(KlicktippExceptionInterface::class);
         }
 
         $this->assertEquals(
@@ -341,7 +342,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(KlicktippExceptionInterface::class);
         }
 
         $this->assertEquals(
@@ -380,7 +381,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(KlicktippExceptionInterface::class);
         }
 
         $this->assertEquals(
@@ -412,7 +413,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(KlicktippExceptionInterface::class);
         }
 
         $return = $this->callMethod(
@@ -449,7 +450,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -487,7 +488,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -517,7 +518,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(KlicktippExceptionInterface::class);
         }
 
         $this->assertEquals(
@@ -556,7 +557,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -588,7 +589,7 @@ class SubscriberTest extends IntegrationTestCase
         $sut = new Subscriber($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -628,7 +629,7 @@ class SubscriberTest extends IntegrationTestCase
             ->onlyMethods(['search', 'update', 'subscribe', 'getEntity'])
             ->getMock();
         $sut->expects($this->once())->method('search')->will(
-            $foundId ? $this->returnValue($foundId) : $this->throwException(new BaseException())
+            $foundId ? $this->returnValue($foundId) : $this->throwException(new CommunicationException())
         );
         $sut->expects($updateInvocations)->method('update')->willReturn(true);
         $sut->expects($subscribeInvocations)->method('subscribe')->willReturn('myId');

@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient\Entities;
 
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Resources\Subscriber as SubscriberEndpoint;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -313,7 +313,7 @@ class Subscriber extends Entity
 
     /**
      * @return null|bool
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function persist(): ?bool
     {
@@ -330,7 +330,7 @@ class Subscriber extends Entity
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
      */
     protected function persistTags(): void
     {

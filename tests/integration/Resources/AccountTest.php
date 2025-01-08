@@ -18,7 +18,7 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
 use D3\KlicktippPhpClient\Entities\Account as AccountEntity;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Resources\Account;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
 use Generator;
@@ -42,7 +42,7 @@ class AccountTest extends IntegrationTestCase
         $sut = new Account($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -116,7 +116,7 @@ class AccountTest extends IntegrationTestCase
         $sut = new Account($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -146,7 +146,7 @@ class AccountTest extends IntegrationTestCase
         $sut = new Account($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $return = $this->callMethod(
@@ -187,7 +187,7 @@ class AccountTest extends IntegrationTestCase
         $sut = new Account($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(

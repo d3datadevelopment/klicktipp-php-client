@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient;
 
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Resources\Account;
 use D3\KlicktippPhpClient\Resources\Field;
 use D3\KlicktippPhpClient\Resources\Subscriber;
@@ -30,7 +30,7 @@ class Klicktipp
     protected ?Connection $connection = null;
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function __construct(
         protected string $client_key,

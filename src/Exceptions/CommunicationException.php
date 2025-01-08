@@ -19,7 +19,7 @@ namespace D3\KlicktippPhpClient\Exceptions;
 
 use Exception;
 
-class BaseException extends Exception implements KlicktippExceptionInterface
+class CommunicationException extends Exception implements KlicktippExceptionInterface
 {
     public function __construct($message = "", $code = 0, Exception $previous = null)
     {

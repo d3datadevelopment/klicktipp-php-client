@@ -19,7 +19,9 @@ namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
 use D3\KlicktippPhpClient\Entities\Tag as TagEntity;
 use D3\KlicktippPhpClient\Entities\TagList;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\KlicktippExceptionInterface;
+use D3\KlicktippPhpClient\Exceptions\ResponseContentException;
 use D3\KlicktippPhpClient\Resources\Tag;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
 use Generator;
@@ -43,7 +45,7 @@ class TagTest extends IntegrationTestCase
         $sut = new Tag($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(KlicktippExceptionInterface::class);
         }
 
         $this->assertEquals(
@@ -80,7 +82,7 @@ class TagTest extends IntegrationTestCase
         $sut = new Tag($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $return = $this->callMethod(
@@ -119,7 +121,7 @@ class TagTest extends IntegrationTestCase
         $sut = new Tag($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -150,7 +152,7 @@ class TagTest extends IntegrationTestCase
         $sut = new Tag($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -181,7 +183,7 @@ class TagTest extends IntegrationTestCase
         $sut = new Tag($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(

@@ -19,8 +19,9 @@ namespace D3\KlicktippPhpClient;
 
 use Assert\Assert;
 use Composer\InstalledVersions;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Exceptions\NoCredentialsException;
+use D3\KlicktippPhpClient\Exceptions\ResponseContentException;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Cookie\CookieJar;
@@ -28,7 +29,6 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
 use Psr\Http\Message\ResponseInterface;
-use RuntimeException;
 
 class Connection
 {
@@ -102,8 +102,10 @@ class Connection
      * @param string $method
      * @param string $uri
      * @param array $options
+     *
      * @return ResponseInterface
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function request(string $method, string $uri, array $options = []): ResponseInterface
     {
@@ -121,22 +123,24 @@ class Connection
                 $this->parseResponse($e->getResponse());
             }
 
-            throw new BaseException(
+            throw new CommunicationException(
                 $e->getResponse()->getBody(),
                 $e->getResponse()->getStatusCode(),
                 $e
             );
         } catch (GuzzleException $e) {
-            throw new BaseException($e->getMessage(), $e->getCode(), $e);
+            throw new CommunicationException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
     /**
      * @param string $method
      * @param string $uri
-     * @param array $options
+     * @param array  $options
+     *
      * @return array
-     * @throws BaseException
+     * @throws ResponseContentException
+     * @throws CommunicationException
      */
     public function requestAndParse(string $method, string $uri, array $options = []): array
     {
@@ -145,38 +149,30 @@ class Connection
 
     /**
      * @param ResponseInterface $response
+     *
      * @return array Parsed JSON result
-     * @throws BaseException
+     * @throws ResponseContentException
      */
     public function parseResponse(ResponseInterface $response): array
     {
-        try {
-            // Rewind the response (middlewares might have read it already)
-            $response->getBody()->rewind();
+        // Rewind the response (middlewares might have read it already)
+        $response->getBody()->rewind();
 
-            $response_body = $response->getBody()->getContents();
+        $response_body = $response->getBody()->getContents();
 
-            $result_array = json_decode($response_body, true);
+        $result_array = json_decode($response_body, true);
 
-            if ($response->getStatusCode() === 204) {
-                return [];
-            }
-
-            if (! is_array($result_array)) {
-                throw new BaseException(
-                    sprintf('%s: %s', $response->getStatusCode(), $response_body),
-                    $response->getStatusCode()
-                );
-            }
-
-            return $result_array;
-        } catch (RuntimeException $e) {
-            throw new BaseException(
-                $e->getMessage(),
-                0,
-                $e
-            );
+        if ($response->getStatusCode() === 204) {
+            return [];
         }
+
+        Assert::lazy()
+            ->setExceptionClass(ResponseContentException::class)
+            ->that($result_array)
+            ->isArray(sprintf('%s: %s', $response->getStatusCode(), $response_body))
+            ->verifyNow();
+
+        return $result_array;
     }
 
     public function getCookiesJar(): CookieJar

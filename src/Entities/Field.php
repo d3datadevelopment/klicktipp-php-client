@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient\Entities;
 
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Resources\Field as FieldEndpoint;
 
 class Field extends Entity
@@ -49,7 +49,7 @@ class Field extends Entity
 
     /**
      * @return null|bool
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function persist(): ?bool
     {

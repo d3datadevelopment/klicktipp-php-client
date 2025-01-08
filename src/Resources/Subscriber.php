@@ -19,7 +19,8 @@ namespace D3\KlicktippPhpClient\Resources;
 
 use D3\KlicktippPhpClient\Entities\Subscriber as SubscriberEntity;
 use D3\KlicktippPhpClient\Entities\SubscriberList;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\ResponseContentException;
 use GuzzleHttp\RequestOptions;
 
 class Subscriber extends Model
@@ -77,7 +78,8 @@ class Subscriber extends Model
     public const PARAM_APIKEY  = 'apikey';
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function index(): SubscriberList
     {
@@ -90,7 +92,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function get(string $subscriberId): array
     {
@@ -101,7 +104,7 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function getEntity(string $subscriberId): SubscriberEntity
     {
@@ -109,7 +112,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function search(string $mailAddress): string
     {
@@ -127,7 +131,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function subscribe(
         string $mailAddress,
@@ -158,7 +163,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function unsubscribe(string $mailAddress): bool
     {
@@ -177,7 +183,9 @@ class Subscriber extends Model
 
     /**
      * add tag
-     * @throws BaseException
+     *
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function tag(string $mailAddress, array $tagIds): bool
     {
@@ -201,7 +209,9 @@ class Subscriber extends Model
 
     /**
      * remove tag
-     * @throws BaseException
+     *
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function untag(string $mailAddress, string $tagId): bool
     {
@@ -220,7 +230,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function tagged(string $tagId): SubscriberList
     {
@@ -238,7 +249,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function update(
         string $subscriberId,
@@ -266,8 +278,9 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
      * @return true
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function delete(string $subscriberId): bool
     {
@@ -280,7 +293,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function signin(
         string $apikey,
@@ -309,7 +323,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function signout(string $apikey, string $emailAddress): string
     {
@@ -328,7 +343,8 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
+     * @throws ResponseContentException
      */
     public function signoff(string $apikey, string $emailAddress): bool
     {
@@ -347,7 +363,7 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function setSubscriber(
         string $mailAddress,
@@ -358,7 +374,7 @@ class Subscriber extends Model
         try {
             $id = $this->search($mailAddress);
             $this->update($id, $fields, $newMailAddress ?? $mailAddress, $smsNumber);
-        } catch (BaseException) {
+        } catch (CommunicationException) {
             $id = $this->subscribe($newMailAddress ?? $mailAddress, null, null, $fields, $smsNumber);
         }
 
@@ -366,7 +382,7 @@ class Subscriber extends Model
     }
 
     /**
-     * @throws BaseException
+     * @throws CommunicationException
      */
     public function getSubscriberByMailAddress(string $mailAddress): SubscriberEntity
     {

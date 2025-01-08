@@ -19,7 +19,7 @@ namespace D3\KlicktippPhpClient\tests\integration\Resources;
 
 use D3\KlicktippPhpClient\Entities\Subscription;
 use D3\KlicktippPhpClient\Entities\SubscriptionList;
-use D3\KlicktippPhpClient\Exceptions\BaseException;
+use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 use D3\KlicktippPhpClient\tests\integration\IntegrationTestCase;
 use Generator;
@@ -43,7 +43,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -80,7 +80,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $return = $this->callMethod(
@@ -128,7 +128,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $return = $this->callMethod(
@@ -152,7 +152,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -183,7 +183,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
@@ -214,7 +214,7 @@ class SubscriptionProcessTest extends IntegrationTestCase
         $sut = new SubscriptionProcess($this->getConnectionMock($response));
 
         if ($expectException) {
-            $this->expectException(BaseException::class);
+            $this->expectException(CommunicationException::class);
         }
 
         $this->assertEquals(
