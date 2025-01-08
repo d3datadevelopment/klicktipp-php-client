@@ -180,7 +180,8 @@ class SubscriptionTest extends TestCase
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Entities\Subscription::setName
      */
-    public function testSetname(): void {
+    public function testSetname(): void
+    {
         $sut = $this->getMockBuilder(Subscription::class)
             ->onlyMethods(['set'])
             ->setConstructorArgs([[SubscriptionEndpoint::LISTID => 'foo']])

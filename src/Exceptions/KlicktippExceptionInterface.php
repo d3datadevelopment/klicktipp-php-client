@@ -17,4 +17,6 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient\Exceptions;
 
-interface KlicktippExceptionInterface {}
+interface KlicktippExceptionInterface
+{
+}

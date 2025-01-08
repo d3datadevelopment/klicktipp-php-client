@@ -550,7 +550,7 @@ class AccountTest extends TestCase
     public function testGetArrayCollectionFromValue($value, ?ArrayCollection $expected, bool $expectException): void
     {
         if ($expectException) {
-            $this->expectException( InvalidCredentialTypeException::class );
+            $this->expectException(InvalidCredentialTypeException::class);
         }
 
         $this->assertEquals(
@@ -579,7 +579,7 @@ class AccountTest extends TestCase
     public function testGetStringOrNullValue($value, ?string $expected, bool $expectException): void
     {
         if ($expectException) {
-            $this->expectException( InvalidCredentialTypeException::class );
+            $this->expectException(InvalidCredentialTypeException::class);
         }
 
         $this->assertEquals(
@@ -608,7 +608,7 @@ class AccountTest extends TestCase
     public function testGetIntOrNullValue($value, ?int $expected, bool $expectException): void
     {
         if ($expectException) {
-            $this->expectException( InvalidCredentialTypeException::class );
+            $this->expectException(InvalidCredentialTypeException::class);
         }
 
         $this->assertEquals(
@@ -637,7 +637,7 @@ class AccountTest extends TestCase
     public function testGetBooleanOrNullValue($value, ?bool $expected, bool $expectException): void
     {
         if ($expectException) {
-            $this->expectException( InvalidCredentialTypeException::class );
+            $this->expectException(InvalidCredentialTypeException::class);
         }
 
         $this->assertEquals(
