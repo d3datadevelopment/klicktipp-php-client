@@ -14,5 +14,5 @@ composer create-project -s dev --prefer-source [--repository '{"type": "vcs", "u
 
 These are not code tests. This call checks the accessibility and availability of the interface endpoints. The account login details are requested to perform these tests.
 ```
-./vendor/bin/phpunit --no-coverage ~/KlicktippApi/tests/availability/
+./vendor/bin/phpunit --no-coverage [your-folder]/tests/availability/
 ```
