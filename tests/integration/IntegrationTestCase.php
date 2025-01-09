@@ -28,7 +28,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * @coversNothing
  */
-class IntegrationTestCase extends TestCase
+abstract class IntegrationTestCase extends TestCase
 {
     protected array $historyContainer = [];
 
