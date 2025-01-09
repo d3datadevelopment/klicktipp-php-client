@@ -56,11 +56,11 @@ class ConnectionTest extends TestCase
         $sut = new Connection($userName, $password);
 
         $this->assertSame(
-            $userName,
+            trim($userName),
             $sut->getClientKey()
         );
         $this->assertSame(
-            $password,
+            trim($password),
             $sut->getSecretKey()
         );
         $this->assertInstanceOf(
@@ -71,7 +71,7 @@ class ConnectionTest extends TestCase
 
     public static function constructDataProvider(): Generator
     {
-        yield 'all credentials set' => ['myuser', 'mypassword', false];
+        yield 'all credentials set' => [' myuser', ' mypassword', false];
         yield 'missing username' => ['', 'mypassword', true];
         yield 'missing password' => ['myuser', '', true];
         yield 'no credentials given' => ['', '', true];

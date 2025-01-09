@@ -57,8 +57,8 @@ class Connection
             ->notBlank()
             ->verifyNow();
 
-        $this->client_key = $client_key;
-        $this->secret_key = $secret_key;
+        $this->client_key = trim($client_key);
+        $this->secret_key = trim($secret_key);
         $this->cookies_jar = new CookieJar();
     }
 
