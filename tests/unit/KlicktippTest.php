@@ -119,7 +119,7 @@ class KlicktippTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Klicktipp::tag
      * @dataProvider instanceGetterDataProvider
      */
-    public function testInstanceGetter(string $testMethodName, string $expectedClassName)
+    public function testInstanceGetter(string $testMethodName, string $expectedClassName): void
     {
         $connectionMock = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()

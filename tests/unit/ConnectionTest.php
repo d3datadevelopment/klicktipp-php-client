@@ -198,7 +198,7 @@ class ConnectionTest extends TestCase
             $this->callMethod(
                 $sutMock,
                 'requestAndParse',
-                ['POST', 'endpoint.php', ['options'=>'']]
+                ['POST', 'endpoint.php', ['options' => '']]
             )
         );
     }
@@ -223,7 +223,7 @@ class ConnectionTest extends TestCase
             ->setConstructorArgs([$status, [], $content])
             ->onlyMethods(['getStatusCode'])
             ->getMock();
-        $responseMock->method('getStatusCode')->willReturn( $status);
+        $responseMock->method('getStatusCode')->willReturn($status);
 
         if ($expectException) {
             $this->expectException(ResponseContentException::class);
