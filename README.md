@@ -1,4 +1,4 @@
-![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/d3datadevelopment/klicktipp-php-client?include_prereleases) [![MIT License](https://img.shields.io/github/license/d3datadevelopment/klicktipp-php-client)](https://git.d3data.de/D3Private/klicktipp-php-client/raw/branch/main/LICENSE)
+![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/d3datadevelopment/klicktipp-php-client?include_prereleases) [![MIT License](https://img.shields.io/github/license/d3datadevelopment/klicktipp-php-client)](https://git.d3data.de/D3Public/klicktipp-php-client/raw/branch/main/LICENSE.md)
 
 [![english version](https://logos.oxidmodule.com/en2_xs.svg)](README.md)
 
