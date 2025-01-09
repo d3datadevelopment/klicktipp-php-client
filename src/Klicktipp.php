@@ -44,7 +44,7 @@ class Klicktipp
         $this->account()->login();
     }
 
-    private function getConnection(): Connection
+    protected function getConnection(): Connection
     {
         if (!$this->connection) {
             $this->connection = new Connection($this->client_key, $this->secret_key);
