@@ -1,12 +1,12 @@
 ![stability-mature](https://img.shields.io/badge/stability-mature-008000.svg)
-[![GitHub Tag](https://img.shields.io/github/v/tag/d3datadevelopment/klicktipp-php-client?label=release)](https://git.d3data.de/D3Public/klicktipp-php-client/tags)
-[![MIT License](https://img.shields.io/github/license/d3datadevelopment/klicktipp-php-client)](https://git.d3data.de/D3Public/klicktipp-php-client/raw/branch/main/LICENSE.md)
+[![latest tag](https://img.shields.io/packagist/v/d3/klicktipp-php-client?label=release)](https://packagist.org/packages/d3/klicktipp-php-client)
+[![MIT License](https://img.shields.io/packagist/l/d3/klicktipp-php-client)](https://git.d3data.de/D3Public/klicktipp-php-client/raw/branch/main/LICENSE.md)
 
 [![english version](https://logos.oxidmodule.com/en2_xs.svg)](README.md)
 
 # Klicktipp PHP Client
 
-An unofficial client for the Klicktipp API.
+A client for the Klicktipp API.
 
 ## Installation
 This project can easily be installed through Composer.
