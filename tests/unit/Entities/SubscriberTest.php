@@ -978,4 +978,44 @@ class SubscriberTest extends TestCase
         yield ['getStartedCampaignTime', 'getStartedCampaigns'];
         yield ['getFinishedCampaignTime', 'getFinishedCampaigns'];
     }
+
+    /**
+     * @test
+     * @throws ReflectionException
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::resubscribe
+     * @dataProvider  resubscribeDataProvider
+     */
+    public function testReSubscribe(
+        bool $endpointSet,
+        InvokedCount $subscribeExpections,
+        bool $isSubscribed
+    ): void
+    {
+        $endpointMock = $this->getMockBuilder(SubscriberEndpoint::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['subscribe'])
+            ->getMock();
+        $endpointMock->expects($subscribeExpections)->method('subscribe');
+
+        $sut = $this->getMockBuilder(Subscriber::class)
+            ->setConstructorArgs([[], $endpointSet ? $endpointMock : null])
+            ->onlyMethods(['isSubscribed', 'getEmailAddress'])
+            ->getMock();
+        $sut->method('isSubscribed')->willReturn($isSubscribed);
+        $sut->method('getEmailAddress')->willReturn('mail@mydomain.tld');
+
+        $this->callMethod(
+            $sut,
+            'resubscribe',
+            ['listId', 'tagid']
+        );
+    }
+
+    public static function resubscribeDataProvider(): Generator
+    {
+        yield 'already subscribed, has endpoint' => [true, self::never(), true];
+        yield 'unsubscribed, has endpoint' => [true, self::once(), false];
+        yield 'already subscribed, no endpoint' => [false, self::never(), true];
+        yield 'unsubscribed, no endpoint' => [false, self::never(), false];
+    }
 }

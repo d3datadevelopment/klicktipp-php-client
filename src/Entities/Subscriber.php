@@ -368,6 +368,32 @@ class Subscriber extends Entity
         }
     }
 
+    /**
+     * @param string      $listId
+     * @param string|null $tagId
+     * @param array|null  $fields
+     * @param string|null $smsNumber
+     *
+     * @return void
+     * @throws CommunicationException
+     */
+    public function resubscribe(
+        string $listId,
+        ?string $tagId = null,
+        ?array $fields = null,
+        ?string $smsNumber = null
+    ): void {
+        if (!$this->isSubscribed()) {
+            $this->endpoint->subscribe(
+                $this->getEmailAddress(),
+                $listId,
+                $tagId,
+                $fields,
+                $smsNumber
+            );
+        }
+    }
+
     // missing getters (return is timestamp list)
 
     // smart_links  SmartLinks
