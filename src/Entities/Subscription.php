@@ -81,9 +81,11 @@ class Subscription extends Entity
      */
     public function persist(): ?bool
     {
-        return $this->endpoint?->update(
-            $this->getListId(),
-            $this->getName()
-        );
+        return !is_null($this->getListId()) ?
+            $this->endpoint?->update(
+                $this->getListId(),
+                $this->getName() ?? ''
+            ) :
+            null;
     }
 }

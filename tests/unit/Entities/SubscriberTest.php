@@ -706,12 +706,11 @@ class SubscriberTest extends TestCase
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::isTagSet
      * @dataProvider isTagSetDataProvider
      */
-    public function testIsTagSet(string $searchTagId, bool $expected): void
+    public function testIsTagSet(?array $currentTags, string $searchTagId, bool $expected): void
     {
-        $tagList = new ArrayCollection([
-            "12494453",
-            "12494463",
-        ]);
+        $tagList = is_null($currentTags) ?
+            null :
+            new ArrayCollection($currentTags);
 
         $sut = $this->getMockBuilder(Subscriber::class)
             ->onlyMethods(['getTags'])
@@ -730,8 +729,9 @@ class SubscriberTest extends TestCase
 
     public static function isTagSetDataProvider(): Generator
     {
-        yield 'existing tag' => ['12494463', true];
-        yield 'missing tag' => ['12495463', false];
+        yield 'existing tag' => [["12494453", "12494463"], '12494463', true];
+        yield 'missing tag' => [["12494453", "12494463"], '12495463', false];
+        yield 'null tag' => [null, '12495463', false];
     }
 
     /**
@@ -739,15 +739,27 @@ class SubscriberTest extends TestCase
      * @return void
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::clearTags
      * @throws ReflectionException
+     * @dataProvider clearTagsDataProvider
      */
-    public function testClearTags(): void
+    public function testClearTags(?array $currentTagList, ?array $expectedTags): void
     {
+        $entityMock = new Subscriber([SubscriberEndpoint::TAGS  => $currentTagList]);
+
         $this->callMethod(
-            $this->entity,
+            $entityMock,
             'clearTags'
         );
 
-        $this->assertCount(0, $this->callMethod($this->entity, 'getTags'));
+        is_null($expectedTags) ?
+            $this->assertNull($this->callMethod($entityMock, 'getTags')) :
+            $this->assertEquals(new ArrayCollection($expectedTags), $this->callMethod($entityMock, 'getTags'));
+    }
+
+    public static function clearTagsDataProvider(): Generator
+    {
+        yield 'tag list exists' => [["12494453","12494463"], []];
+        yield 'tag list empty' => [[], []];
+        yield 'tag list null' => [null, null];
     }
 
     /**
@@ -755,36 +767,56 @@ class SubscriberTest extends TestCase
      * @return void
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::addTag
      * @throws ReflectionException
+     * @dataProvider addTagDataProvider
      */
-    public function testAddTag(): void
+    public function testAddTag(?array $currentTagList, ?array $expectedTagList): void
     {
+        $entityMock = new Subscriber([SubscriberEndpoint::TAGS  => $currentTagList]);
+
         $this->callMethod(
-            $this->entity,
+            $entityMock,
             'addTag',
             ['78546214']
         );
 
-        $this->assertCount(3, $this->callMethod($this->entity, 'getTags'));
-        $this->assertContains('78546214', $this->callMethod($this->entity, 'getTags'));
+        is_null($expectedTagList) ?
+            $this->assertNull($this->callMethod($entityMock, 'getTags')) :
+            $this->assertEquals(new ArrayCollection($expectedTagList), $this->callMethod($entityMock, 'getTags'));
+    }
+
+    public static function addTagDataProvider(): Generator
+    {
+        yield 'tag list exists' => [["12494453","12494463"], ["12494453","12494463", "78546214"]];
+        yield 'tag list empty' => [[], ["78546214"]];
+        yield 'tag list null' => [null, ["78546214"]];
     }
 
     /**
      * @test
-     * @return void
-     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::removeTag
      * @throws ReflectionException
+     * @covers       \D3\KlicktippPhpClient\Entities\Subscriber::removeTag
+     * @dataProvider removeTagDataProvider
      */
-    public function testRemoveTag(): void
+    public function testRemoveTag(?array $currentTagList, ?array $expectedTags): void
     {
+        $entityMock = new Subscriber([SubscriberEndpoint::TAGS  => $currentTagList]);
+
         $this->callMethod(
-            $this->entity,
+            $entityMock,
             'removeTag',
             ['12494453']
         );
 
-        $this->assertCount(1, $this->callMethod($this->entity, 'getTags'));
-        $this->assertContains('12494463', $this->callMethod($this->entity, 'getTags'));
-        $this->assertNotContains('12494453', $this->callMethod($this->entity, 'getTags'));
+        is_null($expectedTags) ?
+            $this->assertNull($this->callMethod($entityMock, 'getTags')) :
+            $this->assertEquals(new ArrayCollection($expectedTags), $this->callMethod($entityMock, 'getTags'));
+    }
+
+    public static function removeTagDataProvider(): Generator
+    {
+        yield 'tag list exists' => [["12494453","12494463"], [1 => "12494463"]];
+        yield 'tag list empty' => [[], []];
+        yield 'tag list null' => [null, null];
     }
 
     /**
@@ -795,7 +827,9 @@ class SubscriberTest extends TestCase
      */
     public function testPersist(
         bool $endpointSet,
+        ?string $currentId,
         InvokedCount $endpointInvocation,
+        InvokedCount $persistTagsInvocation,
         ?bool $expectedReturn
     ): void {
         $endpointMock = $this->getMockBuilder(SubscriberEndpoint::class)
@@ -805,10 +839,10 @@ class SubscriberTest extends TestCase
         $endpointMock->expects($endpointInvocation)->method('update')->willReturn(true);
 
         $sut = $this->getMockBuilder(Subscriber::class)
-            ->setConstructorArgs([[SubscriberEndpoint::ID => 'foo'], $endpointSet ? $endpointMock : null])
+            ->setConstructorArgs([[SubscriberEndpoint::ID => $currentId], $endpointSet ? $endpointMock : null])
             ->onlyMethods(['persistTags'])
             ->getMock();
-        $sut->expects($this->once())->method('persistTags');
+        $sut->expects($persistTagsInvocation)->method('persistTags');
 
         $this->assertSame(
             $expectedReturn,
@@ -821,8 +855,9 @@ class SubscriberTest extends TestCase
 
     public static function persistDataProvider(): Generator
     {
-        yield 'has endpoint'    => [true, self::once(), true];
-        yield 'has no endpoint'    => [false, self::never(), null];
+        yield 'has endpoint'    => [true, 'fixture', self::once(), self::once(), true];
+        yield 'has no endpoint'    => [false, 'fixture', self::never(), self::once(), null];
+        yield 'has endpoint, no id' => [true, null, self::never(), self::never(), null];
     }
 
     /**
@@ -834,6 +869,7 @@ class SubscriberTest extends TestCase
     public function testPersistTags(
         bool $endpointSet,
         InvokedCount $endpointInvocation,
+        ?array $currentTagList,
         ?array $newTagList,
         InvokedCount $removeTagInvocation,
         InvokedCount $setTagInvocation
@@ -842,10 +878,9 @@ class SubscriberTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getTags'])
             ->getMock();
-        $entityMock->method('getTags')->willReturn(new ArrayCollection([
-            "12494453",
-            "12494463",
-        ]));
+        $entityMock->method('getTags')->willReturn(
+            is_null($currentTagList) ? null : new ArrayCollection($currentTagList)
+        );
 
         $endpointMock = $this->getMockBuilder(SubscriberEndpoint::class)
             ->disableOriginalConstructor()
@@ -868,10 +903,11 @@ class SubscriberTest extends TestCase
 
     public static function persistTagsDataProvider(): Generator
     {
-        yield 'has endpoint, tag removed' => [true, self::once(), ["12494453"], self::once(), self::never()];
-        yield 'has endpoint, tag added' => [true, self::once(), ["12494453","12494463","12494464"], self::never(), self::once()];
-        yield 'has endpoint, taglist equals' => [true, self::once(), ["12494453","12494463"], self::never(), self::never()];
-        yield 'has no endpoint'    => [false, self::never(), null, self::never(), self::never()];
+        yield 'has endpoint, tag removed' => [true, self::once(), ["12494453", "12494463"], ["12494453"], self::once(), self::never()];
+        yield 'has endpoint, tag added' => [true, self::once(), ["12494453", "12494463"], ["12494453","12494463","12494464"], self::never(), self::once()];
+        yield 'has endpoint, taglist equals' => [true, self::once(), ["12494453", "12494463"], ["12494453","12494463"], self::never(), self::never()];
+        yield 'has no endpoint'    => [false, self::never(), ["12494453", "12494463"], null, self::never(), self::never()];
+        yield 'has endpoint, taglist null'    => [true, self::once(), null, null, self::never(), self::never()];
     }
 
     /**

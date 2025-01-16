@@ -53,9 +53,11 @@ class Field extends Entity
      */
     public function persist(): ?bool
     {
-        return $this->endpoint?->update(
-            $this->getId(),
-            $this->getName()
-        );
+        return !is_null($this->getId()) ?
+            $this->endpoint?->update(
+                $this->getId(),
+                $this->getName() ?? ''
+            ) :
+            null;
     }
 }

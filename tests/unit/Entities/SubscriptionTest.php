@@ -205,6 +205,7 @@ class SubscriptionTest extends TestCase
      */
     public function testPersist(
         bool $endpointSet,
+        ?string $id,
         InvokedCount $endpointInvocation,
         ?bool $expectedReturn
     ): void {
@@ -213,12 +214,12 @@ class SubscriptionTest extends TestCase
             ->onlyMethods(['update'])
             ->getMock();
         $endpointMock->expects($endpointInvocation)->method('update')->with(
-            $this->identicalTo('foo'),
+            $this->identicalTo($id),
             $this->identicalTo('bar'),
         )->willReturn(true);
 
         $sut = new Subscription(
-            [SubscriptionEndpoint::LISTID => 'foo', SubscriptionEndpoint::NAME  => 'bar'],
+            [SubscriptionEndpoint::LISTID => $id, SubscriptionEndpoint::NAME  => 'bar'],
             $endpointSet ? $endpointMock : null
         );
 
@@ -233,7 +234,8 @@ class SubscriptionTest extends TestCase
 
     public static function persistDataProvider(): Generator
     {
-        yield 'has endpoint'    => [true, self::once(), true];
-        yield 'has no endpoint'    => [false, self::never(), null];
+        yield 'has endpoint'        => [true, 'fixture', self::once(), true];
+        yield 'has no endpoint'     => [false, 'fixture', self::never(), null];
+        yield 'has endpoint, no id' => [true, null, self::never(), null];
     }
 }

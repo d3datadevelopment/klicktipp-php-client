@@ -65,10 +65,12 @@ class Tag extends Entity
      */
     public function persist(): ?bool
     {
-        return $this->endpoint?->update(
-            $this->getId(),
-            $this->getName(),
-            $this->getText()
-        );
+        return !is_null($this->getId()) ?
+            $this->endpoint?->update(
+                $this->getId(),
+                $this->getName() ?? '',
+                $this->getText() ?? ''
+            ) :
+            null;
     }
 }

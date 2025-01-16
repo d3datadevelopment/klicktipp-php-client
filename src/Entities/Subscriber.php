@@ -175,7 +175,7 @@ class Subscriber extends Entity
         // use persist method to send to Klicktipp
     }
 
-    protected function getFieldLongName(string $fieldId): ?string
+    protected function getFieldLongName(string $fieldId): string
     {
         return str_starts_with($fieldId, 'field') ? trim($fieldId) : 'field'.trim($fieldId);
     }
@@ -193,15 +193,15 @@ class Subscriber extends Entity
     public function clearTags(): void
     {
         $tags = $this->getTags();
-        $tags->clear();
-        $this->set(SubscriberEndpoint::TAGS, $tags->toArray());
+        $tags?->clear();
+        $this->set(SubscriberEndpoint::TAGS, $tags?->toArray());
 
         // use persist method to send to Klicktipp
     }
 
     public function addTag(string $tagId): void
     {
-        $tags = $this->getTags();
+        $tags = $this->getTags() ?: new ArrayCollection();
         $tags->add($tagId);
         $this->set(SubscriberEndpoint::TAGS, $tags->toArray());
 
@@ -211,8 +211,8 @@ class Subscriber extends Entity
     public function removeTag(string $tagId): void
     {
         $tags = $this->getTags();
-        $tags->removeElement($tagId);
-        $this->set(SubscriberEndpoint::TAGS, $tags->toArray());
+        $tags?->removeElement($tagId);
+        $this->set(SubscriberEndpoint::TAGS, $tags?->toArray());
 
         // use persist method to send to Klicktipp
     }
@@ -232,7 +232,7 @@ class Subscriber extends Entity
 
     public function getManualTagTime(string $tagId): ?DateTime
     {
-        return $this->getDateTimeFromValue($this->getManualTags()->get($tagId));
+        return $this->getDateTimeFromValue($this->getManualTags()?->get($tagId));
     }
 
     public function getSmartTags(): ?ArrayCollection
@@ -317,16 +317,20 @@ class Subscriber extends Entity
      */
     public function persist(): ?bool
     {
-        $return = $this->endpoint?->update(
-            $this->getId(),
-            $this->getFields()->toArray(),
-            $this->getEmailAddress(),
-            $this->getSmsPhone()
-        );
+        if (!is_null($this->getId())) {
+            $return = $this->endpoint?->update(
+                $this->getId(),
+                $this->getFields()->toArray(),
+                $this->getEmailAddress() ?? '',
+                $this->getSmsPhone() ?? ''
+            );
 
-        $this->persistTags();
+            $this->persistTags();
 
-        return $return;
+            return $return;
+        }
+
+        return null;
     }
 
     /**
@@ -338,18 +342,29 @@ class Subscriber extends Entity
             return;
         }
 
-        $currentTags = $this->endpoint->getEntity($this->getId())->getTags();
+        $currentTags = $this->endpoint->getEntity($this->getId() ?? '')->getTags();
 
-        $removeTags = array_diff($currentTags->toArray(), $this->getTags()->toArray());
+        $removeTags = array_diff(
+            $currentTags?->toArray() ?? [],
+            $this->getTags()?->toArray() ?? []
+        );
+
         if (count($removeTags)) {
             foreach ($removeTags as $removeTag) {
-                $this->endpoint->untag($this->getEmailAddress(), $removeTag);
+                if (!is_null($this->getEmailAddress())) {
+                    $this->endpoint->untag($this->getEmailAddress(), $removeTag);
+                }
             }
         }
 
-        $addTags = array_diff($this->getTags()->toArray(), $currentTags->toArray());
+        $addTags = array_diff(
+            $this->getTags()?->toArray() ?? [],
+            $currentTags?->toArray() ?? []
+        );
         if (count($addTags)) {
-            $this->endpoint->tag($this->getEmailAddress(), $addTags);
+            if (!is_null($this->getEmailAddress())) {
+                $this->endpoint->tag($this->getEmailAddress(), $addTags);
+            }
         }
     }
 
