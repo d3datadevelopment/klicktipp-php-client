@@ -18,12 +18,15 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\Entities;
 
 use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Subscriber as SubscriberEndpoint;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Subscriber extends Entity
 {
+    use EndpointTrait;
+
     public const STATUS_SUBSCRIBED = 'subscribed';
     public const BOUNCE_NOTBOUNCED = 'Not Bounced';
 
@@ -314,11 +317,12 @@ class Subscriber extends Entity
     /**
      * @return null|bool
      * @throws CommunicationException
+     * @throws MissingEndpointException
      */
     public function persist(): ?bool
     {
         if (!is_null($this->getId())) {
-            $return = $this->endpoint?->update(
+            $return = $this->getEndpoint()->update(
                 $this->getId(),
                 $this->getFields()->toArray(),
                 $this->getEmailAddress() ?? '',
@@ -335,14 +339,11 @@ class Subscriber extends Entity
 
     /**
      * @throws CommunicationException
+     * @throws MissingEndpointException
      */
     protected function persistTags(): void
     {
-        if (!$this->endpoint instanceof SubscriberEndpoint) {
-            return;
-        }
-
-        $currentTags = $this->endpoint->getEntity($this->getId() ?? '')->getTags();
+        $currentTags = $this->getEndpoint()->getEntity($this->getId() ?? '')->getTags();
 
         $removeTags = array_diff(
             $currentTags?->toArray() ?? [],
@@ -352,7 +353,7 @@ class Subscriber extends Entity
         if (count($removeTags)) {
             foreach ($removeTags as $removeTag) {
                 if (!is_null($this->getEmailAddress())) {
-                    $this->endpoint->untag($this->getEmailAddress(), $removeTag);
+                    $this->getEndpoint()->untag($this->getEmailAddress(), $removeTag);
                 }
             }
         }
@@ -363,7 +364,7 @@ class Subscriber extends Entity
         );
         if (count($addTags)) {
             if (!is_null($this->getEmailAddress())) {
-                $this->endpoint->tag($this->getEmailAddress(), $addTags);
+                $this->getEndpoint()->tag($this->getEmailAddress(), $addTags);
             }
         }
     }
@@ -384,7 +385,7 @@ class Subscriber extends Entity
         ?string $smsNumber = null
     ): void {
         if (!$this->isSubscribed()) {
-            $this->endpoint->subscribe(
+            $this->getEndpoint()->subscribe(
                 $this->getEmailAddress(),
                 $listId,
                 $tagId,

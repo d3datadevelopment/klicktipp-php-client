@@ -19,6 +19,7 @@ namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Subscriber;
 use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Subscriber as SubscriberEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use DateTime;
@@ -844,6 +845,10 @@ class SubscriberTest extends TestCase
             ->getMock();
         $sut->expects($persistTagsInvocation)->method('persistTags');
 
+        if (!$endpointSet) {
+            $this->expectException(MissingEndpointException::class);
+        }
+
         $this->assertSame(
             $expectedReturn,
             $this->callMethod(
@@ -856,7 +861,7 @@ class SubscriberTest extends TestCase
     public static function persistDataProvider(): Generator
     {
         yield 'has endpoint'    => [true, 'fixture', self::once(), self::once(), true];
-        yield 'has no endpoint'    => [false, 'fixture', self::never(), self::once(), null];
+        yield 'has no endpoint'    => [false, 'fixture', self::never(), self::never(), null];
         yield 'has endpoint, no id' => [true, null, self::never(), self::never(), null];
     }
 
@@ -893,6 +898,10 @@ class SubscriberTest extends TestCase
         $sut = new Subscriber([SubscriberEndpoint::ID => 'foo', SubscriberEndpoint::EMAIL => 'mymail@mydomain.tld'], $endpointSet ? $endpointMock : null);
         if ($newTagList) {
             $sut->set('tags', $newTagList);
+        }
+
+        if (!$endpointSet) {
+            $this->expectException(MissingEndpointException::class);
         }
 
         $this->callMethod(
@@ -983,14 +992,14 @@ class SubscriberTest extends TestCase
      * @test
      * @throws ReflectionException
      * @covers \D3\KlicktippPhpClient\Entities\Subscriber::resubscribe
+     * @covers \D3\KlicktippPhpClient\Entities\Subscriber::getEndpoint
      * @dataProvider  resubscribeDataProvider
      */
     public function testReSubscribe(
         bool $endpointSet,
         InvokedCount $subscribeExpections,
         bool $isSubscribed
-    ): void
-    {
+    ): void {
         $endpointMock = $this->getMockBuilder(SubscriberEndpoint::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['subscribe'])
@@ -1003,6 +1012,10 @@ class SubscriberTest extends TestCase
             ->getMock();
         $sut->method('isSubscribed')->willReturn($isSubscribed);
         $sut->method('getEmailAddress')->willReturn('mail@mydomain.tld');
+
+        if (!$endpointSet && !$isSubscribed) {
+            $this->expectException(MissingEndpointException::class);
+        }
 
         $this->callMethod(
             $sut,

@@ -18,10 +18,13 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\Entities;
 
 use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Tag as TagEndpoint;
 
 class Tag extends Entity
 {
+    use EndpointTrait;
+
     private ?TagEndpoint $endpoint;
 
     public function __construct(array $elements = [], ?TagEndpoint $endpoint = null)
@@ -62,11 +65,12 @@ class Tag extends Entity
     /**
      * @return null|bool
      * @throws CommunicationException
+     * @throws MissingEndpointException
      */
     public function persist(): ?bool
     {
         return !is_null($this->getId()) ?
-            $this->endpoint?->update(
+            $this->getEndpoint()->update(
                 $this->getId(),
                 $this->getName() ?? '',
                 $this->getText() ?? ''

@@ -19,6 +19,7 @@ namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Field;
 use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Field as FieldEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use Generator;
@@ -183,6 +184,10 @@ class FieldTest extends TestCase
             [FieldEndpoint::ID => 'foo', FieldEndpoint::NAME => 'name'],
             $endpointSet ? $endpointMock : null
         );
+
+        if (!$endpointSet) {
+            $this->expectException(MissingEndpointException::class);
+        }
 
         $this->assertSame(
             $expectedReturn,

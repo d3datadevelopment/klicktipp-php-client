@@ -19,6 +19,7 @@ namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Subscription;
 use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess as SubscriptionEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use Generator;
@@ -222,6 +223,10 @@ class SubscriptionTest extends TestCase
             [SubscriptionEndpoint::LISTID => $id, SubscriptionEndpoint::NAME  => 'bar'],
             $endpointSet ? $endpointMock : null
         );
+
+        if (!$endpointSet) {
+            $this->expectException(MissingEndpointException::class);
+        }
 
         $this->assertSame(
             $expectedReturn,

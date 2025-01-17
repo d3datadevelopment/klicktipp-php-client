@@ -19,11 +19,14 @@ namespace D3\KlicktippPhpClient\Entities;
 
 use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Account as AccountEndpoint;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Account extends Entity
 {
+    use EndpointTrait;
+
     private ?AccountEndpoint $endpoint;
 
     public function __construct(array $elements = [], ?AccountEndpoint $endpoint = null)
@@ -193,9 +196,10 @@ class Account extends Entity
     /**
      * @return null|bool
      * @throws CommunicationException
+     * @throws MissingEndpointException
      */
     public function persist(): ?bool
     {
-        return $this->endpoint?->update();
+        return $this->getEndpoint()->update();
     }
 }

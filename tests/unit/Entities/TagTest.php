@@ -19,6 +19,7 @@ namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Tag;
 use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Tag as TagEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use Generator;
@@ -197,6 +198,10 @@ class TagTest extends TestCase
             [TagEndpoint::ID => 'foo', TagEndpoint::NAME => 'name', TagEndpoint::TEXT => 'text'],
             $endpointSet ? $endpointMock : null
         );
+
+        if (!$endpointSet) {
+            $this->expectException(MissingEndpointException::class);
+        }
 
         $this->assertSame(
             $expectedReturn,

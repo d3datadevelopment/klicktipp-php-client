@@ -19,6 +19,7 @@ namespace D3\KlicktippPhpClient\tests\unit\Entities;
 
 use D3\KlicktippPhpClient\Entities\Account;
 use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Account as AccountEndpoint;
 use D3\KlicktippPhpClient\tests\TestCase;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -525,6 +526,10 @@ class AccountTest extends TestCase
         $endpointMock->expects($endpointInvocation)->method('update')->willReturn(true);
 
         $sut = new Account([AccountEndpoint::UID => 'foo'], $endpointSet ? $endpointMock : null);
+
+        if (!$endpointSet) {
+            $this->expectException(MissingEndpointException::class);
+        }
 
         $this->assertSame(
             $expectedReturn,

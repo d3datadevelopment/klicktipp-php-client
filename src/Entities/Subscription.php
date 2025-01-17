@@ -18,10 +18,13 @@ declare(strict_types=1);
 namespace D3\KlicktippPhpClient\Entities;
 
 use D3\KlicktippPhpClient\Exceptions\CommunicationException;
+use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 
 class Subscription extends Entity
 {
+    use EndpointTrait;
+
     private ?SubscriptionProcess $endpoint;
 
     public function __construct(array $elements = [], ?SubscriptionProcess $endpoint = null)
@@ -78,11 +81,12 @@ class Subscription extends Entity
     /**
      * @return null|bool
      * @throws CommunicationException
+     * @throws MissingEndpointException
      */
     public function persist(): ?bool
     {
         return !is_null($this->getListId()) ?
-            $this->endpoint?->update(
+            $this->getEndpoint()->update(
                 $this->getListId(),
                 $this->getName() ?? ''
             ) :
