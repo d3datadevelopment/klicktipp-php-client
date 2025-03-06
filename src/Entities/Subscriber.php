@@ -84,7 +84,7 @@ class Subscriber extends Entity
 
     public function isSubscribed(): bool
     {
-        return $this->getStatus() === self::STATUS_SUBSCRIBED;
+        return strtolower($this->getStatus()) === strtolower(self::STATUS_SUBSCRIBED);
     }
 
     public function getBounce(): ?string
@@ -94,7 +94,7 @@ class Subscriber extends Entity
 
     public function isBounced(): bool
     {
-        return $this->getBounce() !== self::BOUNCE_NOTBOUNCED;
+        return strtolower($this->getBounce()) !== strtolower(self::BOUNCE_NOTBOUNCED);
     }
 
     public function getDate(): ?DateTime
