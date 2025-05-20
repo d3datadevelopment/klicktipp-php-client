@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://git.d3data.de/D3Public/klicktipp-php-client/compare/1.0.3...rel_1.x)
+## [Unreleased](https://git.d3data.de/D3Public/klicktipp-php-client/compare/1.1.0...rel_1.x)
+
+## [1.1.0](https://git.d3data.de/D3Public/klicktipp-php-client/compare/1.0.3...1.1.0) - 2025-05-20
+### Added
+- can request optin pending status
 
 ## [1.0.3](https://git.d3data.de/D3Public/klicktipp-php-client/compare/1.0.2...1.0.3) - 2025-03-06
 ### Fixed
