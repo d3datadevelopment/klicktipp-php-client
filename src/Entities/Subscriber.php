@@ -28,6 +28,7 @@ class Subscriber extends Entity
     use EndpointTrait;
 
     public const STATUS_SUBSCRIBED = 'subscribed';
+    public const STATUS_OPTIN_PENDING = 'Opt-In Pending';
     public const BOUNCE_NOTBOUNCED = 'Not Bounced';
 
     private ?SubscriberEndpoint $endpoint;
@@ -85,6 +86,11 @@ class Subscriber extends Entity
     public function isSubscribed(): bool
     {
         return strtolower($this->getStatus()) === strtolower(self::STATUS_SUBSCRIBED);
+    }
+
+    public function isOptInPending(): bool
+    {
+        return strtolower($this->getStatus()) === strtolower(self::STATUS_OPTIN_PENDING);
     }
 
     public function getBounce(): ?string
