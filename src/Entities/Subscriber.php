@@ -399,6 +399,9 @@ class Subscriber extends Entity
                 $smsNumber
             );
         }
+        if ($tagId && !$this->isTagSet($tagId)) {
+            $this->addTag($tagId);
+        }
     }
 
     // missing getters (return is timestamp list)
