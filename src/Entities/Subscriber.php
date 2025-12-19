@@ -390,7 +390,7 @@ class Subscriber extends Entity
         ?array $fields = null,
         ?string $smsNumber = null
     ): void {
-        if (!$this->isSubscribed()) {
+        if (!$this->isSubscribed() && !$this->getUnsubscription()) {
             $this->getEndpoint()->subscribe(
                 $this->getEmailAddress(),
                 $listId,
