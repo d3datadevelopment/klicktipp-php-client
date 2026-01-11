@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient\Entities;
 
+use Assert\Assert;
 use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Subscriber as SubscriberEndpoint;
@@ -25,8 +26,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Subscriber extends Entity
 {
-    use EndpointTrait;
-
     public const STATUS_SUBSCRIBED = 'subscribed';
     public const STATUS_OPTIN_PENDING = 'Opt-In Pending';
     public const BOUNCE_NOTBOUNCED = 'Not Bounced';
@@ -37,6 +36,17 @@ class Subscriber extends Entity
     {
         $this->endpoint = $endpoint;
         parent::__construct($elements);
+    }
+
+    private function getEndpoint(): SubscriberEndpoint
+    {
+        Assert::lazy()
+            ->setExceptionClass(MissingEndpointException::class)
+            ->that($this->endpoint)
+            ->isInstanceOf(SubscriberEndpoint::class)
+            ->verifyNow();
+
+        return $this->endpoint;
     }
 
     public function getId(): ?string

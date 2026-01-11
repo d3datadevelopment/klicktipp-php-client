@@ -17,20 +17,30 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient\Entities;
 
+use Assert\Assert;
 use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\SubscriptionProcess;
 
 class Subscription extends Entity
 {
-    use EndpointTrait;
-
     private ?SubscriptionProcess $endpoint;
 
     public function __construct(array $elements = [], ?SubscriptionProcess $endpoint = null)
     {
         $this->endpoint = $endpoint;
         parent::__construct($elements);
+    }
+
+    private function getEndpoint(): SubscriptionProcess
+    {
+        Assert::lazy()
+            ->setExceptionClass(MissingEndpointException::class)
+            ->that($this->endpoint)
+            ->isInstanceOf(SubscriptionProcess::class)
+            ->verifyNow();
+
+        return $this->endpoint;
     }
 
     public function getListId(): ?string

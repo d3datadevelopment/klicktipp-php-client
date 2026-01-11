@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient\Entities;
 
+use Assert\Assert;
 use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Exceptions\InvalidCredentialTypeException;
 use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
@@ -25,14 +26,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Account extends Entity
 {
-    use EndpointTrait;
-
     private ?AccountEndpoint $endpoint;
 
     public function __construct(array $elements = [], ?AccountEndpoint $endpoint = null)
     {
         $this->endpoint = $endpoint;
         parent::__construct($elements);
+    }
+
+    private function getEndpoint(): AccountEndpoint
+    {
+        Assert::lazy()
+            ->setExceptionClass(MissingEndpointException::class)
+            ->that($this->endpoint)
+            ->isInstanceOf(AccountEndpoint::class)
+            ->verifyNow();
+
+        return $this->endpoint;
     }
 
     /**

@@ -243,7 +243,7 @@ class Subscriber extends Model
                     self::PARAM_TAGID => trim($tagId),
                 ],
             ]
-        ) ?? [];
+        );
 
         return new SubscriberList($data);
     }
@@ -278,7 +278,6 @@ class Subscriber extends Model
     }
 
     /**
-     * @return true
      * @throws CommunicationException
      * @throws ResponseContentException
      */

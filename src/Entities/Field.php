@@ -17,20 +17,30 @@ declare(strict_types=1);
 
 namespace D3\KlicktippPhpClient\Entities;
 
+use Assert\Assert;
 use D3\KlicktippPhpClient\Exceptions\CommunicationException;
 use D3\KlicktippPhpClient\Exceptions\MissingEndpointException;
 use D3\KlicktippPhpClient\Resources\Field as FieldEndpoint;
 
 class Field extends Entity
 {
-    use EndpointTrait;
-
     private ?FieldEndpoint $endpoint;
 
     public function __construct(array $elements = [], ?FieldEndpoint $endpoint = null)
     {
         $this->endpoint = $endpoint;
         parent::__construct($elements);
+    }
+
+    private function getEndpoint(): FieldEndpoint
+    {
+        Assert::lazy()
+            ->setExceptionClass(MissingEndpointException::class)
+            ->that($this->endpoint)
+            ->isInstanceOf(FieldEndpoint::class)
+            ->verifyNow();
+
+        return $this->endpoint;
     }
 
     public function getId(): ?string
