@@ -28,7 +28,7 @@ jobs:
         with:
           php_version: ${{ matrix.php-version }}
           syntax_check_paths: "src,tests"
-          test_suites: "unit,integrations"
+          test_suites: "unit,integration"
           debug: ${{ runner.debug }}
 
   report-status:
